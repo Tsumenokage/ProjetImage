@@ -46,7 +46,15 @@ void process() {
       int found = getNextMatrix(image);
       if (found == 0)
 	break;
-      imshow("toto", image);
+
+      
+      /************ convert a BGR ->  Grey *******************/
+      Mat grey;
+      cvtColor(image, grey, CV_BGR2GRAY);
+      threshold( grey, grey, 120, 255, 0 );
+ 
+      
+      imshow("toto", grey);
       waitKey();
     }
 }
