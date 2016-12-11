@@ -67,13 +67,15 @@ void contoursTerrain(const Mat src, Mat &dst)
   vector<Vec4i> hierarchy;
   int perimeters = 0;
   int cntIndex = 0;
+  Mat approxM;
   Canny( src, detectionTerrainCanny, threshCanny, threshCanny*2, 3 );
-  findContours( detectionTerrainCanny, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
+  findContours( detectionTerrainCanny, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
   
   for(int i = 0; i <contours.size();i++)
     {
       int tmpperimeter = arcLength(contours[i],1);
-      if(tmpperimeter > perimeters)
+      approxPolyDP(contours[i], approxM,0.02 * tmpperimeter, 1);
+      if(tmpperimeter > perimeters && approxM.rows  < 4)
 	{
 	  perimeters = tmpperimeter;
 	  cntIndex = i;
