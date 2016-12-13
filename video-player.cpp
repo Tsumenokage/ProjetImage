@@ -335,11 +335,14 @@ void process() {
       //imshow("output",output);
 		
       Mat last;
-      patchAll3(grass, HS, countour, last);
+      int pixel_positive = patchAll3(grass, HS, countour, last);
+
       Mat element = getStructuringElement(MORPH_ELLIPSE, Size(5,5), Point(0, 0) );
       dilate(last,last,element);
-      //imshow("last",last);
-	  contourBlob(last,image);
+      std::cout << pixel_positive << std::endl;
+      if(pixel_positive <= 75 && pixel_positive > 0)
+	imshow("last",last);
+      contourBlob(last,image);
       
       /************* HoughLines *******************/
       
