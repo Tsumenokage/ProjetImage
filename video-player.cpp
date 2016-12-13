@@ -98,23 +98,23 @@ void contoursTerrain(const Mat src, Mat &dst)
 }
 void detectionCouleur(const Mat im, Mat &dst)
 {
-	 Mat imgTh;
-	 Mat imHSV;
-	 int iLowH = 30;
-	 int iHighH = 80;
+  Mat imgTh;
+  Mat imHSV;
+  int iLowH = 30;
+  int iHighH = 80;
 
-	 int iLowS = 0; 
-	 int iHighS = 255;
+  int iLowS = 0; 
+  int iHighS = 255;
 
-	 int iLowV = 0;
-	 int iHighV = 255;
-	 cvtColor(im,imHSV,CV_BGR2HSV);
-	 inRange(imHSV, Scalar(iLowH, iLowS, iLowV), Scalar(iHighH, iHighS, iHighV), imgTh); //Threshold the image
+  int iLowV = 0;
+  int iHighV = 255;
+  cvtColor(im,imHSV,CV_BGR2HSV);
+  inRange(imHSV, Scalar(iLowH, iLowS, iLowV), Scalar(iHighH, iHighS, iHighV), imgTh); //Threshold the image
 	 
-	 //Hough(im,imgTh);
+  //Hough(im,imgTh);
 	 
-	 //imshow("couleur",imgTh);
-	 imgTh.copyTo(dst);
+  //imshow("couleur",imgTh);
+  imgTh.copyTo(dst);
 
 }
 
@@ -216,25 +216,7 @@ void process() {
       Mat image;
       int found = getNextMatrix(image);
       if (found == 0)
-	break;
-
-      //Hough(image);
-      /************ convert a BGR ->  Grey *******************/
-      Mat grey;
-      cvtColor(image, grey, CV_BGR2GRAY);
-      threshold( grey, grey, 120, 255, 0 );
- 
-      
-      //      imshow("toto", grey);
-      
-      /************ show BGR channels *******************/
-
-      Mat BGR[3];
-      split(image,BGR);
-      //imshow("B",BGR[0]);
-      //imshow("G",BGR[1]);
-      //imshow("R",BGR[2]);
-
+	break;    
       /************ show HSV channels *******************/
       /** find posts **/
       Mat hsv;
@@ -243,7 +225,7 @@ void process() {
       split(hsv,HSV);
       Mat new_h;
       Mat new_S;
-      thBetween(HSV[0],new_h,25,30);
+      thBetween(HSV[0],new_h,22,30);
       //threshold( HSV[0], HSV[0], 20, 255, 0 );
       //imshow("H",new_h);
       thBetween(HSV[1],new_S,180,255);
@@ -261,22 +243,20 @@ void process() {
       /*** if too much grass on the corner , no posts ***/
       if ( !tooMuchGrass(grass)) {
       
-      Mat countour;
-      contoursTerrain(grass,countour);
-      Mat input[3];
-      input[0] = HS;
-      input[1] = grass;
-      input[2] = countour;
-      Mat output;
-      merge(input,3,output);
-      imshow("output",output);
+	Mat countour;
+	contoursTerrain(grass,countour);
+	Mat input[3];
+	input[0] = HS;
+	input[1] = grass;
+	input[2] = countour;
+	Mat output;
+	merge(input,3,output);
+	imshow("output",output);
 
-      Mat last;
-      patchAll3(grass, HS, countour, last) ;
-      imshow("last",last);
-
-      
-      /************* HoughLines *******************/
+	Mat last;
+	patchAll3(grass, HS, countour, last) ;
+	imshow("last",last);
+	/************* HoughLines *******************/
       }
       imshow("origin",image);
       waitKey();
