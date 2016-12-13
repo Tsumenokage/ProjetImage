@@ -10,8 +10,6 @@ using namespace std;
 
 vector<Mat> images;
 unsigned int image_counter;
-void Hough(Mat);
-void Corner(Mat);
 RNG rng(12345);
 
 int hasValue(Mat image) {
@@ -120,79 +118,6 @@ void detectionCouleur(const Mat im, Mat &dst)
 
 }
 
-
-void Corner(Mat im)
-{
-  Mat dst;
-  Mat dst_norm,dst_norm_scaled;
-  dst = Mat::zeros( im.size(), CV_32FC1 );
-  /// Detector parameters
-  int blockSize = 2;
-  int apertureSize = 3;
-  double k = 0.04;
-  int thresh = 150;
-
-  /// Detecting corners
-  cornerHarris( im, dst, blockSize, apertureSize, k, BORDER_DEFAULT );
-  
-    /// Normalizing
-  normalize( dst, dst_norm, 0, 255, NORM_MINMAX, CV_32FC1, Mat() );
-  convertScaleAbs( dst_norm, dst_norm_scaled );
-  
-    /// Drawing a circle around corners
-  for( int j = 0; j < dst_norm.rows ; j++ )
-     { for( int i = 0; i < dst_norm.cols; i++ )
-          {
-            if( (int) dst_norm.at<float>(j,i) > thresh )
-              {
-               circle( dst_norm_scaled, Point( i, j ), 5,  Scalar(0), 2, 8, 0 );
-              }
-          }
-     }
-  /// Showing the result
-  imshow( "coin", dst_norm_scaled );
-}
-
-void Hough(Mat im) {
-  Mat grey;
-  cvtColor(im, grey, CV_BGR2GRAY);
-  threshold( grey, grey, 175, 255, 0 );
-  imshow("seuil", grey);
-  Mat outCanny;
-  Mat cdst;
-  im.copyTo(cdst);
-  Canny(grey, outCanny, 0, 255, 3);
-  imshow("Canny",outCanny);
-  Corner(outCanny);
-	
-	
-  vector<Vec4i> lines;
-  HoughLinesP(outCanny, lines, 1, CV_PI/180, 50, 50, 5 );
-  //vector<Vec2f> lines;
-  //HoughLines(outCanny, lines, 1, CV_PI/180, 100, 0, 0 );
-  /*
-    for( size_t i = 0; i < lines.size(); i++ )
-    {
-    float rho = lines[i][0], theta = lines[i][1];
-    Point pt1, pt2;
-    double a = cos(theta), b = sin(theta);
-    double x0 = a*rho, y0 = b*rho;
-    pt1.x = cvRound(x0 + 1000*(-b));
-    pt1.y = cvRound(y0 + 1000*(a));
-    pt2.x = cvRound(x0 - 1000*(-b));
-    pt2.y = cvRound(y0 - 1000*(a));
-    line( cdst, pt1, pt2, Scalar(0,0,255), 3, CV_AA);
-    }*/
-	
-	
-  for( size_t i = 0; i < lines.size(); i++ )  {
-      Vec4i l = lines[i];
-      line( cdst, Point(l[0], l[1]), Point(l[2], l[3]), Scalar(0,0,255), 3, CV_AA);
-  }
-	
-  imshow("Hough",cdst);
-}
-
 void init() {
   image_counter = 1;
   ifstream img_list;
@@ -207,6 +132,42 @@ void init() {
   }
   cout << images.size() << " images found" << endl;
 }
+
+/*
+ * Grass is threashold matrix
+ */
+bool tooMuchGrass(Mat grass) {
+  int green_pixel = 0;
+  for (int i=0;i<grass.cols;i++) {
+    if ( (int) grass.at<uchar>(0,i) == 255)
+      green_pixel++;
+    if ( (int) grass.at<uchar>(1,i) == 255)
+      green_pixel++;
+
+    if ( (int) grass.at<uchar>(grass.rows-1,i) == 255)
+      green_pixel++;
+    if ( (int) grass.at<uchar>(grass.rows-2,i) == 255)
+      green_pixel++;
+  }
+  for (int i=0;i<grass.rows;i++) {
+    if ( (int) grass.at<uchar>(i,0) == 255)
+      green_pixel++;
+    if ( (int) grass.at<uchar>(i,1) == 255)
+      green_pixel++;
+    if ( (int) grass.at<uchar>(i,grass.cols-1) == 255)
+      green_pixel++;
+    if ( (int) grass.at<uchar>(i,grass.cols-2) == 255)
+      green_pixel++;
+  }
+  int max_pixel = 4 * (grass.cols + grass.rows);
+  cout << "green "<< ((float)green_pixel)/max_pixel << endl;
+  imshow("grass",grass);
+ 
+  if (green_pixel > 0.8 * max_pixel)
+    return true;
+  return false;
+}
+
 
 int getNextMatrix(Mat& M) {
 
@@ -291,15 +252,14 @@ void process() {
       thAnd(new_h,new_S,HS);
       erode(HS,HS,cv::Mat());
       dilate(HS,HS,cv::Mat());
-      //imshow("HS",HS);   <- bonne image
-      //imshow("S",new_S);
-      //imshow("V",HSV[2]);
 
       /** find grass **/
       Mat grass;
       detectionCouleur(image,grass);
       erode(grass,grass,cv::Mat());
       dilate(grass,grass,cv::Mat());
+      /*** if too much grass on the corner , no posts ***/
+      if ( !tooMuchGrass(grass)) {
       
       Mat countour;
       contoursTerrain(grass,countour);
@@ -317,7 +277,7 @@ void process() {
 
       
       /************* HoughLines *******************/
-      
+      }
       imshow("origin",image);
       waitKey();
     }
