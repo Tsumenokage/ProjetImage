@@ -4,10 +4,12 @@
 #include <dirent.h>
 #include <opencv2/opencv.hpp>
 #include <fstream>
+#include <ctime>
 
 using namespace cv;
 using namespace std;
 
+float progress = 0.0;
 vector<Mat> images;
 unsigned int image_counter;
 void Hough(Mat);
@@ -68,14 +70,22 @@ void contoursTerrain(const Mat src, Mat &dst)
   int perimeters = 0;
   int cntIndex = 0;
   Mat approxM;
-  Canny( src, detectionTerrainCanny, threshCanny, threshCanny*2, 3 );
+  
+  Mat dilateC;
+  int element_shape = MORPH_ELLIPSE;
+  Mat element = getStructuringElement(element_shape, Size(11,11), Point(0, 0) );
+  dilate( src, dilateC, element );
+  detectionTerrainCanny = dilateC-src;
+  
+
+  Canny( detectionTerrainCanny, detectionTerrainCanny, threshCanny, threshCanny*2, 3 );
   findContours( detectionTerrainCanny, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
   
   for(int i = 0; i <contours.size();i++)
     {
       int tmpperimeter = arcLength(contours[i],1);
       approxPolyDP(contours[i], approxM,0.02 * tmpperimeter, 1);
-      if(tmpperimeter > perimeters && approxM.rows  < 4)
+      if(tmpperimeter > perimeters && approxM.rows  <= 4)
 	{
 	  perimeters = tmpperimeter;
 	  cntIndex = i;
@@ -205,14 +215,14 @@ void init() {
     }
     img_list.close();
   }
-  cout << images.size() << " images found" << endl;
+  //cout << images.size() << " images found" << endl;
 }
 
 int getNextMatrix(Mat& M) {
 
   if (image_counter < images.size()) {
     M = images[image_counter];
-    cout << image_counter << endl;
+    //cout << image_counter << endl;
     image_counter++;
     return 1;
   } else {
@@ -249,14 +259,56 @@ void thAnd(const Mat src1, const Mat src2, Mat &dst) {
   }
 }
 
+void contourBlob(Mat src, Mat originale)
+{
+	vector<vector<Point> > contours;
+	  vector<Vec4i> hierarchy;
+	findContours( src, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
+	
+	
+	if(contours.size() <= 3)
+	{
+		for (int i = 0; i < contours.size(); i++)
+		{
+			Point2f center;
+			float radius;
+			minEnclosingCircle(contours[i],center,radius);
+			circle(originale, center, (int)radius*5, Scalar(0,0,255));
+		}
+	}
+	
+	
+}
+
+void progressBar()
+{
+    int barWidth = 70;
+	
+    std::cout << "[";
+    int pos = barWidth * progress;
+    for (int i = 0; i < barWidth; ++i) {
+        if (i < pos) std::cout << "=";
+        else if (i == pos) std::cout << ">";
+        else std::cout << " ";
+    }
+    std::cout << "] " << int(progress * 100.0) << " %\r";
+    std::cout.flush();
+	
+
+std::cout << std::endl;
+}
+
 void process() {
+  int cptG = 0;
+  int cptB = 0;
+  clock_t begin = clock();
   while(1)
     {
       Mat image;
       int found = getNextMatrix(image);
       if (found == 0)
 	break;
-
+      //copyMakeBorder(image,image,2,2,2,2,BORDER_CONSTANT,Scalar(0,0,0));
       //Hough(image);
       /************ convert a BGR ->  Grey *******************/
       Mat grey;
@@ -264,7 +316,7 @@ void process() {
       threshold( grey, grey, 120, 255, 0 );
  
       
-      //      imshow("toto", grey);
+      //imshow("seuil", grey);
       
       /************ show BGR channels *******************/
 
@@ -291,36 +343,52 @@ void process() {
       thAnd(new_h,new_S,HS);
       erode(HS,HS,cv::Mat());
       dilate(HS,HS,cv::Mat());
-      //imshow("HS",HS);   <- bonne image
+      //imshow("HS",HS);   //<- bonne image
       //imshow("S",new_S);
       //imshow("V",HSV[2]);
 
       /** find grass **/
       Mat grass;
       detectionCouleur(image,grass);
+      
+      //imshow("grass", grass);
       erode(grass,grass,cv::Mat());
       dilate(grass,grass,cv::Mat());
-      
+      dilate(grass,grass,cv::Mat());
+
       Mat countour;
       contoursTerrain(grass,countour);
+      //imshow("contour", countour);
       Mat input[3];
       input[0] = HS;
       input[1] = grass;
       input[2] = countour;
       Mat output;
       merge(input,3,output);
-      imshow("output",output);
-
+      //imshow("output",output);
+		
       Mat last;
-      patchAll3(grass, HS, countour, last) ;
-      imshow("last",last);
-
+      patchAll3(grass, HS, countour, last);
+      Mat element = getStructuringElement(MORPH_ELLIPSE, Size(5,5), Point(0, 0) );
+      dilate(last,last,element);
+      //imshow("last",last);
+	  contourBlob(last,image);
       
       /************* HoughLines *******************/
       
-      imshow("origin",image);
-      waitKey();
+      //imshow("origin",image);
+      //waitKey();
+      progress = (float)image_counter/(float)images.size();
+      progressBar();
+
     }
+    clock_t end = clock();
+    double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+    
+    cout << "Numbers of pictures : " << images.size() << endl;
+    cout << "Computing time : " << elapsed_secs << "s" <<endl;
+    cout << "Time per images : " << elapsed_secs/images.size() << "s" << endl;
+    cout << "Frames per seconds : " << 1.0/(elapsed_secs/images.size()) << endl;
 }
 
 void usage (const char *s) {
