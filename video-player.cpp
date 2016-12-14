@@ -117,27 +117,27 @@ void contoursTerrain(const Mat src, Mat &dst) {
   findContours( detectionTerrainCanny, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
   //Utilisation d'un algorithme de Hull pour trouver les enveloppes convexes
   vector<vector<Point> >hull( contours.size());
-   for( unsigned int i = 0; i < contours.size(); i++ )
-      {  convexHull( Mat(contours[i]), hull[i], false );}
+  for( unsigned int i = 0; i < contours.size(); i++ )
+    {  convexHull( Mat(contours[i]), hull[i], false );}
   
-   //Dessin de l'ensemble des enveloppes convexes trouvées
-   Mat hullP = Mat::zeros( src.size(), CV_8UC3 );
-   for( unsigned int i = 0; i< contours.size(); i++ )
-      {
-        Scalar color = Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );
-        //drawContours( hullP, contours, i, color, 1, 8, vector<Vec4i>(), 0, Point() );
-        drawContours( hullP, hull, i, color, 1, 8, vector<Vec4i>(), 0, Point() );
-      }
-   imshow( "Hull demo", hullP );
+  //Dessin de l'ensemble des enveloppes convexes trouvées
+  Mat hullP = Mat::zeros( src.size(), CV_8UC3 );
+  for( unsigned int i = 0; i< contours.size(); i++ )
+    {
+      Scalar color = Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );
+      //drawContours( hullP, contours, i, color, 1, 8, vector<Vec4i>(), 0, Point() );
+      drawContours( hullP, hull, i, color, 1, 8, vector<Vec4i>(), 0, Point() );
+    }
+  imshow( "Hull demo", hullP );
   //On cherche la plus grande enveloppe convexe
   for( unsigned int i = 0; i <hull.size();i++)
     {
-		  int tmpperimeter = arcLength(hull[i],1);
-		  if(tmpperimeter > perimeters)
-		{
-		  perimeters = tmpperimeter;
-		  cntIndex = i;
-		}
+      int tmpperimeter = arcLength(hull[i],1);
+      if(tmpperimeter > perimeters)
+        {
+          perimeters = tmpperimeter;
+          cntIndex = i;
+        }
       
     }
   
@@ -177,22 +177,22 @@ void contoursTerrain(const Mat src, Mat &dst) {
  * 
  * */
 void detectionGrass(const Mat im, Mat &dst) {
-	 Mat imgTh;
-	 Mat imHSV;
-	 //Définition des valeurs min et max de H,S et V pour détecter l'herbe
-	 int iLowH = 22;
-	 int iHighH = 60;
+  Mat imgTh;
+  Mat imHSV;
+  //Définition des valeurs min et max de H,S et V pour détecter l'herbe
+  int iLowH = 22;
+  int iHighH = 60;
 
-	 int iLowS = 50; 
-	 int iHighS = 215;
+  int iLowS = 50; 
+  int iHighS = 215;
 
-	 int iLowV = 40;
-	 int iHighV = 175;
-	 //Converstion de l'image du format BGR a HSV
-	 cvtColor(im,imHSV,CV_BGR2HSV);
-	 //Algorithme de recherche d'une plage de couleur dans une image
-	 inRange(imHSV, Scalar(iLowH, iLowS, iLowV), Scalar(iHighH, iHighS, iHighV), imgTh);
-	 imgTh.copyTo(dst);
+  int iLowV = 40;
+  int iHighV = 175;
+  //Converstion de l'image du format BGR a HSV
+  cvtColor(im,imHSV,CV_BGR2HSV);
+  //Algorithme de recherche d'une plage de couleur dans une image
+  inRange(imHSV, Scalar(iLowH, iLowS, iLowV), Scalar(iHighH, iHighS, iHighV), imgTh);
+  imgTh.copyTo(dst);
 
 }
 
@@ -201,33 +201,19 @@ void detectionGrass(const Mat im, Mat &dst) {
  * @param folder String correspondant au dossier ou seront cherché les images
  * */
 void init(String folder) {
-	cout << "Initialization" << endl;
-  
-  
-    cv::String path(folder + "/*.png"); //select only jpg
-	vector<cv::String> fn;
-	glob(path,fn,true); // recurse
-	for (size_t k=0; k<fn.size(); ++k)
-	{
-		 cv::Mat im = cv::imread(fn[k]);
-		 if (im.empty()) continue; //only proceed if sucsessful
-		 // you probably want to do some preprocessing
-		 images.push_back(im);
-	}
-	/*
   cout << "Initialization" << endl;
-  image_counter = 1;
-  ifstream img_list;
-  string image;
-  img_list.open("./images/log2/log2.txt");
-  if (img_list.is_open()) {
-    while ( getline (img_list,image) ) {
-      Mat M = imread("./images/log2/"+image);
-      images.push_back ( M );
+  
+  
+  cv::String path(folder + "/*.png"); //select only jpg
+  vector<cv::String> fn;
+  glob(path,fn,true); // recurse
+  for (size_t k=0; k<fn.size(); ++k)
+    {
+      cv::Mat im = cv::imread(fn[k]);
+      if (im.empty()) continue; //only proceed if sucsessful
+      // you probably want to do some preprocessing
+      images.push_back(im);
     }
-    img_list.close();
-  }
-  //cout << images.size() << " images found" << endl;*/
 }
 
 /**
@@ -241,7 +227,7 @@ bool tooMuchGrass(const Mat grass) {
   //On va compter l'ensemble des pixels blancs présents en bordure de l'image
   int green_pixel = 0;
   for (int i=0;i<grass.cols;i++) {
-	  cout << "first "<<i<<endl;
+    cout << "first "<<i<<endl;
     if ( (int) grass.at<uchar>(0+bordure,i) == 255)
       green_pixel++;
     if ( (int) grass.at<uchar>(1+bordure,i) == 255)
@@ -253,7 +239,7 @@ bool tooMuchGrass(const Mat grass) {
       green_pixel++;
   }
   for (int i=0;i<grass.rows;i++) {
-	  cout << "sec "<< i+bordure <<" "<<grass.rows<<endl;
+    cout << "sec "<< i+bordure <<" "<<grass.rows<<endl;
     if ( (int) grass.at<uchar>(i,0+bordure) == 255)
       green_pixel++;
     if ( (int) grass.at<uchar>(i,1+bordure) == 255)
@@ -301,29 +287,29 @@ int getNextMatrix(Mat& M) {
  * 
  * */
 void contourBlob(Mat src, Mat originale) {
-	vector<vector<Point> > contours;
-	vector<Vec4i> hierarchy;
+  vector<vector<Point> > contours;
+  vector<Vec4i> hierarchy;
 	
-	//On cherche les contours de chaque zone blanches correspondant à un poteaux
-	findContours( src, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
-	vector<Point> centers;
-	vector<float> radiuss;
-	//Si on trouve pas trops de zone correspondant à des poteaux 
-	if(contours.size() <= 300)
-	{
-		//On dessine un cercle autour de chaque zone
-		for (unsigned int i = 0; i < contours.size(); i++)
-		{
-			Point2f center;
-			float radius;
-			minEnclosingCircle(contours[i],center,radius);
-			centers.push_back(center);
-			radiuss.push_back(radius);
-			circle(originale, center, 40, Scalar(0,0,255));
-		}
+  //On cherche les contours de chaque zone blanches correspondant à un poteaux
+  findContours( src, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
+  vector<Point> centers;
+  vector<float> radiuss;
+  //Si on trouve pas trops de zone correspondant à des poteaux 
+  if(contours.size() <= 300)
+    {
+      //On dessine un cercle autour de chaque zone
+      for (unsigned int i = 0; i < contours.size(); i++)
+        {
+          Point2f center;
+          float radius;
+          minEnclosingCircle(contours[i],center,radius);
+          centers.push_back(center);
+          radiuss.push_back(radius);
+          circle(originale, center, 40, Scalar(0,0,255));
+        }
 		
 		
-	}
+    }
 	
 }
 
@@ -331,20 +317,20 @@ void contourBlob(Mat src, Mat originale) {
  * Cette fonction va gérer l'affichage de la barre de progression
  * */
 void progressBar() {
-    int barWidth = 70;
+  int barWidth = 70;
 	
-    std::cout << "[";
-    int pos = barWidth * progress;
-    for (int i = 0; i < barWidth; ++i) {
-        if (i < pos) std::cout << "=";
-        else if (i == pos) std::cout << ">";
-        else std::cout << " ";
-    }
-    std::cout << "] " << int(progress * 100.0) << " %\r";
-    std::cout.flush();
+  std::cout << "[";
+  int pos = barWidth * progress;
+  for (int i = 0; i < barWidth; ++i) {
+    if (i < pos) std::cout << "=";
+    else if (i == pos) std::cout << ">";
+    else std::cout << " ";
+  }
+  std::cout << "] " << int(progress * 100.0) << " %\r";
+  std::cout.flush();
 	
 
-std::cout << std::endl;
+  std::cout << std::endl;
 }
 
 /**
@@ -357,18 +343,18 @@ void process(String benchmark) {
   bool bench;
     
   if(benchmark == "b")
-  {
-	  bench = true;
-  }
+    {
+      bench = true;
+    }
   else if(benchmark == "s")
-  {
-	  bench = false;
-  }
+    {
+      bench = false;
+    }
   else
-  {
-	  cerr << "Wrong option" << endl;
-	  exit(EXIT_FAILURE);
-  }
+    {
+      cerr << "Wrong option" << endl;
+      exit(EXIT_FAILURE);
+    }
   
   
   while(1)
@@ -408,55 +394,55 @@ void process(String benchmark) {
       /*** Si trops d'herbe autour, le robot regarde à ses pieds et donc peu de chance d'y voir un poteau ***/
       if ( !tooMuchGrass(grass)) {
 		  
-	  /********* Détection des contours du terrain ************/
-      Mat countour;
-      contoursTerrain(grass,countour);
+        /********* Détection des contours du terrain ************/
+        Mat countour;
+        contoursTerrain(grass,countour);
       
-      /******** On merge les trois composantes : Herbes, Poteaux (zone blanches) et contour du terraind ans une même image**/
-      Mat input[3];
-      input[0] = HS;
-      input[1] = grass;
-      input[2] = countour;
-      Mat output;
-      merge(input,3,output);
-      if(!bench)
-		imshow("output",output);
+        /******** On merge les trois composantes : Herbes, Poteaux (zone blanches) et contour du terraind ans une même image**/
+        Mat input[3];
+        input[0] = HS;
+        input[1] = grass;
+        input[2] = countour;
+        Mat output;
+        merge(input,3,output);
+        if(!bench)
+          imshow("output",output);
       
-      /************On cherche les poteaux précisément grâce à la fonction patchAll3**************/
-      Mat last;
-      patchAll3(grass, HS, countour, last, 10);
+        /************On cherche les poteaux précisément grâce à la fonction patchAll3**************/
+        Mat last;
+        patchAll3(grass, HS, countour, last, 10);
       
-      /*****On effectue une dilation sur l'image retournée par patchAll3 *******/
-      Mat element = getStructuringElement(MORPH_ELLIPSE, Size(5,5), Point(0, 0) );
-      dilate(last,last,element);
-      if(!bench)
-		imshow("last",last);
-	  /**** On entoure les zones correspondant à la zone des poteaux trouvées *****/
-      contourBlob(last,image);
+        /*****On effectue une dilation sur l'image retournée par patchAll3 *******/
+        Mat element = getStructuringElement(MORPH_ELLIPSE, Size(5,5), Point(0, 0) );
+        dilate(last,last,element);
+        if(!bench)
+          imshow("last",last);
+        /**** On entoure les zones correspondant à la zone des poteaux trouvées *****/
+        contourBlob(last,image);
       
-      progress = (float)image_counter/(float)images.size();
-      progressBar();
+        progress = (float)image_counter/(float)images.size();
+        progressBar();
       }
       
       progress = (float)image_counter/(float)images.size();
       progressBar();
       if(!bench)
-      {
-		  imshow("origin",image);
-		  waitKey();
-	  }
+        {
+          imshow("origin",image);
+          waitKey();
+        }
     }
-    clock_t end = clock();
-    double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+  clock_t end = clock();
+  double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
     
-    if(bench)
+  if(bench)
     {
-		cout << "Numbers of pictures : " << images.size() << endl;
-		cout << "Computing time : " << elapsed_secs << "s" <<endl;
-		cout << "Time per images : " << elapsed_secs/images.size() << "s" << endl;
-		cout << "Frames per seconds : " << 1.0/(elapsed_secs/images.size()) << endl;
-	}
-    exit(EXIT_SUCCESS);
+      cout << "Numbers of pictures : " << images.size() << endl;
+      cout << "Computing time : " << elapsed_secs << "s" <<endl;
+      cout << "Time per images : " << elapsed_secs/images.size() << "s" << endl;
+      cout << "Frames per seconds : " << 1.0/(elapsed_secs/images.size()) << endl;
+    }
+  exit(EXIT_SUCCESS);
 }
 
 /**
@@ -537,11 +523,12 @@ int zoneColor(const Mat grass, Mat& current, int color_pixel, int x, int y) {
 }
 
 /**
- * Description
- * @param c
- * @param q
- * @param r
- * @return
+ * Renvoi de quel côté se trouve le point r par rapport au vecteur pq
+ * @param p Point
+ * @param q Point 
+ * @param r Point
+ * @return 0 si les trois points sont alignés, 1 si r est à gauche du vecteur pq, 0 sinon
+ * @ deprecated
  * */
 int orientation(cPoint p, cPoint q, cPoint r) {
   int val = (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
@@ -551,10 +538,11 @@ int orientation(cPoint p, cPoint q, cPoint r) {
 }
 
 /**
- * Description
- * @param points
- * @param n
- * @param grass
+ * Implémentation de la marche de Jarvis permettant de trouver et d'afficher l'enveloppe connexe d'un ensemble de points. Cette fonction n'est pas utilisée en effet sa complexité dépend linéairement du nombre de points à traiter, environ 300 000 points, rend la durée de traitement trop grande.
+ * @param points tableau des points 
+ * @param n taille du tableau
+ * @param grass image binaire source
+ * @deprecated
  * */
 void jarvisSlave(cPoint points[], int n, const Mat grass) {
   cout << "begin slave" << endl;
@@ -600,9 +588,10 @@ void jarvisSlave(cPoint points[], int n, const Mat grass) {
 }
 
 /**
- * Description
- * @param grass
- * @param size
+ * Interface entre la représentation de données d'opencv et de la marche de jarvis implémentée, voir jarvisSlave.
+ * @param grass Matrice binaire contenant les points à envelopper
+ * @param size Nombre de pixels à 255.
+ * @deprecated
  * */	
 void jarvis(const Mat grass, int size) {
   cPoint points[size];
@@ -620,9 +609,10 @@ void jarvis(const Mat grass, int size) {
 }
 
 /**
- * Description
- * @param grass
- * @param dst
+ * Par référence, renvoie le plus grand élément connexe d'une image binaire entrée en paramètre. Ne foncionne uniquement si moins de 255 éléments connexes.
+ * @param grass Matrie source
+ * @param dst Matrice destination
+ * @deprecated
  * */
 void grassProcessing(const Mat grass, Mat & dst)  {
   Mat current;
@@ -657,7 +647,6 @@ void grassProcessing(const Mat grass, Mat & dst)  {
     }
   }
 
-  // jarvis(biggest,biggest_size);
   biggest.copyTo(dst);
   imshow("biggest_green",biggest);
 }
