@@ -470,13 +470,14 @@ int main(int argc, char* argv[]) {
 
 
 /**
- * Description
- * @param grass
- * @param current
- * @param color_pixel
- * @param x
- * @param y
- * @return
+ * Colorie l'espace connexe associé au point de coordonnées (x,y) à la couleur color_pixel, en nuance de gris uniquement
+ * @param grass Matrice binaire source
+ * @param current Matrice de nuance de gris destination
+ * @param color_pixel niveau de gris (0-255)
+ * @param x abscisse du point désiré
+ * @param y ordonnée du point désiré
+ * @return Le nombre de pixels de cette espace connexe
+ * @deprecated
  * */
 int zoneColor(const Mat grass, Mat& current, int color_pixel, int x, int y) {
   list<int> abs;
