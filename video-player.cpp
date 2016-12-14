@@ -22,6 +22,7 @@ int bordure = 5; /**< Nombre depixel rajouté en bordure de l'image */
 
 /**
  * Structure permettant de définir un point
+ * @deprecated
  * */
 struct cPoint {
   int x; /** < Entier correspondant à l'abscisse du point */
@@ -528,7 +529,7 @@ int zoneColor(const Mat grass, Mat& current, int color_pixel, int x, int y) {
  * @param q Point 
  * @param r Point
  * @return 0 si les trois points sont alignés, 1 si r est à gauche du vecteur pq, 0 sinon
- * @ deprecated
+ * @deprecated
  * */
 int orientation(cPoint p, cPoint q, cPoint r) {
   int val = (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
