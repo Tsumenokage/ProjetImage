@@ -13,6 +13,7 @@ float progress = 0.0;
 vector<Mat> images;
 unsigned int image_counter;
 RNG rng(12345);
+int bordure = 5;
 
 int hasValue(Mat image) {
   int val=0;
@@ -79,21 +80,35 @@ void contoursTerrain(const Mat src, Mat &dst)
   Canny( src, detectionTerrainCanny, threshCanny, threshCanny*2, 3 );
   findContours( detectionTerrainCanny, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
   
-  for(int i = 0; i <contours.size();i++)
+  vector<vector<Point> >hull( contours.size());
+   for( int i = 0; i < contours.size(); i++ )
+      {  convexHull( Mat(contours[i]), hull[i], false );}
+  
+     /// Draw contours + hull results
+   Mat hullP = Mat::zeros( src.size(), CV_8UC3 );
+   for( int i = 0; i< contours.size(); i++ )
+      {
+        Scalar color = Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );
+        //drawContours( hullP, contours, i, color, 1, 8, vector<Vec4i>(), 0, Point() );
+        drawContours( hullP, hull, i, color, 1, 8, vector<Vec4i>(), 0, Point() );
+      }
+   imshow( "Hull demo", hullP );
+  
+  for(int i = 0; i <hull.size();i++)
     {
-      int tmpperimeter = arcLength(contours[i],1);
-      if(tmpperimeter > perimeters)
-	{
-	  perimeters = tmpperimeter;
-	  cntIndex = i;
-	}
+		  int tmpperimeter = arcLength(hull[i],1);
+		  if(tmpperimeter > perimeters)
+		{
+		  perimeters = tmpperimeter;
+		  cntIndex = i;
+		}
       
     }
   
   /// Draw contours
   Mat drawing = Mat::zeros( detectionTerrainCanny.size(), CV_8UC3 );
   Scalar color = Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );     
-  drawContours( drawing, contours, cntIndex, color, 2, 8, hierarchy, 0, Point() );
+  drawContours( drawing, hull, cntIndex, color, 2, 8, hierarchy, 0, Point() );
 
   cvtColor(drawing,drawing,CV_BGR2GRAY);
   for(int i=0;i<drawing.rows;i++) {
@@ -128,6 +143,7 @@ void detectionCouleur(const Mat im, Mat &dst)
 }
 
 void init() {
+  cout << "Initialization" << endl;
   image_counter = 1;
   ifstream img_list;
   string image;
@@ -145,30 +161,32 @@ void init() {
 /*
  * Grass is threashold matrix
  */
-bool tooMuchGrass(Mat grass) {
+bool tooMuchGrass(const Mat grass) {
   int green_pixel = 0;
   for (int i=0;i<grass.cols;i++) {
-    if ( (int) grass.at<uchar>(0,i) == 255)
+	  cout << "first "<<i<<endl;
+    if ( (int) grass.at<uchar>(0+bordure,i) == 255)
       green_pixel++;
-    if ( (int) grass.at<uchar>(1,i) == 255)
+    if ( (int) grass.at<uchar>(1+bordure,i) == 255)
       green_pixel++;
 
-    if ( (int) grass.at<uchar>(grass.rows-1,i) == 255)
+    if ( (int) grass.at<uchar>(grass.rows-1-bordure,i) == 255)
       green_pixel++;
-    if ( (int) grass.at<uchar>(grass.rows-2,i) == 255)
+    if ( (int) grass.at<uchar>(grass.rows-2-bordure,i) == 255)
       green_pixel++;
   }
   for (int i=0;i<grass.rows;i++) {
-    if ( (int) grass.at<uchar>(i,0) == 255)
+	  cout << "sec "<< i+bordure <<" "<<grass.rows<<endl;
+    if ( (int) grass.at<uchar>(i,0+bordure) == 255)
       green_pixel++;
-    if ( (int) grass.at<uchar>(i,1) == 255)
+    if ( (int) grass.at<uchar>(i,1+bordure) == 255)
       green_pixel++;
-    if ( (int) grass.at<uchar>(i,grass.cols-1) == 255)
+    if ( (int) grass.at<uchar>(i,grass.cols-1-bordure) == 255)
       green_pixel++;
-    if ( (int) grass.at<uchar>(i,grass.cols-2) == 255)
+    if ( (int) grass.at<uchar>(i,grass.cols-2-bordure) == 255)
       green_pixel++;
   }
-  int max_pixel = 4 * (grass.cols + grass.rows);
+  int max_pixel = 4 * (grass.cols-(bordure*2) + grass.rows-(bordure*2));
   cout << "green "<< ((float)green_pixel)/max_pixel << endl;
   imshow("grass",grass);
  
@@ -226,14 +244,19 @@ void contourBlob(Mat src, Mat originale)
 	findContours( src, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
 	vector<Point> centers;
 	vector<float> radiuss;
-	for (int i = 0; i < contours.size(); i++)
+	if(contours.size() <= 3)
 	{
-		Point2f center;
-		float radius;
-		minEnclosingCircle(contours[i],center,radius);
-		centers.push_back(center);
-		radiuss.push_back(radius);
-		circle(originale, center, (int)radius*5, Scalar(0,0,255));
+		for (int i = 0; i < contours.size(); i++)
+		{
+			Point2f center;
+			float radius;
+			minEnclosingCircle(contours[i],center,radius);
+			centers.push_back(center);
+			radiuss.push_back(radius);
+			circle(originale, center, (int)radius*5, Scalar(0,0,255));
+		}
+		
+		
 	}
 	
 }
@@ -265,11 +288,14 @@ void process() {
   clock_t begin = clock();
   while(1)
     {
+	  
       Mat image;
       int found = getNextMatrix(image);
       if (found == 0)
 	break;
-      //copyMakeBorder(image,image,2,2,2,2,BORDER_CONSTANT,Scalar(0,0,0));
+
+      
+      copyMakeBorder(image,image,bordure,bordure,bordure,bordure,BORDER_CONSTANT,Scalar(0,0,0));
       //Hough(image);
       /************ convert a BGR ->  Grey *******************/
       Mat grey;
@@ -295,10 +321,12 @@ void process() {
       split(hsv,HSV);
       Mat new_h;
       Mat new_S;
-      thBetween(HSV[0],new_h,25,30);
+      thBetween(HSV[0],new_h,23,30);
+      Mat element = getStructuringElement(MORPH_ELLIPSE, Size(4,4), Point(0, 0) );
+      erode(new_h,new_h,element);
       //threshold( HSV[0], HSV[0], 20, 255, 0 );
       //imshow("H",new_h);
-      thBetween(HSV[1],new_S,180,255);
+      thBetween(HSV[1],new_S,170,255);
 
       Mat HS;
       thAnd(new_h,new_S,HS);
@@ -323,17 +351,17 @@ void process() {
       //imshow("contour", countour);
       Mat input[3];
       input[0] = HS;
-      input[1] = grass;
+      input[1] = countour;
       input[2] = countour;
       Mat output;
       merge(input,3,output);
       imshow("output",output);
 		
       Mat last;
-      patchAll3(grass, HS, countour, last);
+      patchAll3(countour, HS, countour, last);
       Mat element = getStructuringElement(MORPH_ELLIPSE, Size(5,5), Point(0, 0) );
       dilate(last,last,element);
-      //imshow("last",last);
+      imshow("last",last);
 	  contourBlob(last,image);
       
       /************* HoughLines *******************/
