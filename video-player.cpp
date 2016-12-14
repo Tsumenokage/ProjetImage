@@ -329,6 +329,161 @@ void contourBlob(Mat src, Mat originale) {
 }
 
 /**
+ * Cette fonction va gérer l'affichage de la barre de progression
+ * */
+void progressBar() {
+    int barWidth = 70;
+	
+    std::cout << "[";
+    int pos = barWidth * progress;
+    for (int i = 0; i < barWidth; ++i) {
+        if (i < pos) std::cout << "=";
+        else if (i == pos) std::cout << ">";
+        else std::cout << " ";
+    }
+    std::cout << "] " << int(progress * 100.0) << " %\r";
+    std::cout.flush();
+	
+
+std::cout << std::endl;
+}
+
+/**
+ * Cette fonction va réaliser tout le processus de détections des buts
+ * @param benchmark Option permettant de spécifier si l'on veut le type d'affichage voulue
+ * 
+ * */
+void process(String benchmark) {
+  clock_t begin = clock();
+  bool bench;
+    
+  if(benchmark == "b")
+  {
+	  bench = true;
+  }
+  else if(benchmark == "s")
+  {
+	  bench = false;
+  }
+  else
+  {
+	  cerr << "Wrong option" << endl;
+	  exit(EXIT_FAILURE);
+  }
+  
+  
+  while(1)
+    {
+	  
+      Mat image;
+      int found = getNextMatrix(image);
+      if (found == 0)
+	break;
+
+      /************ Ajout d'une bordure de pixels noirs à l'image *****************************/
+      copyMakeBorder(image,image,bordure,bordure,bordure,bordure,BORDER_CONSTANT,Scalar(0,0,0));
+
+      /************ Détection de composante couleur de l'image *******************/
+      
+      
+      /** Détection des poteaux des buts (zones blanches de l'image) **/
+      Mat hsv,HS;
+      cvtColor(image,hsv,CV_BGR2HSV);
+      inRange(hsv, Scalar(20, 175, 0), Scalar(255, 255, 255), HS); //Threshold the image
+      Mat elementB = getStructuringElement(MORPH_ELLIPSE, Size(4,4), Point(0, 0) );
+      erode(HS,HS,elementB);
+      
+      /** Détection de l'herbe (zone verte de l'image **/
+      Mat grass;
+      detectionGrass(image,grass);
+      medianBlur(grass,grass,7);
+      
+      //imshow("grass", grass);
+      /** Opération morphologique sur l'herbe afin d'obtenir une zone la plus lisse possible **/
+      Mat element = getStructuringElement(MORPH_ELLIPSE, Size(10,10), Point(0, 0) );
+      erode(grass,grass,element);
+      erode(grass,grass,element);
+      dilate(grass,grass,element);
+      dilate(grass,grass,element);
+
+      /*** Si trops d'herbe autour, le robot regarde à ses pieds et donc peu de chance d'y voir un poteau ***/
+      if ( !tooMuchGrass(grass)) {
+		  
+	  /********* Détection des contours du terrain ************/
+      Mat countour;
+      contoursTerrain(grass,countour);
+      
+      /******** On merge les trois composantes : Herbes, Poteaux (zone blanches) et contour du terraind ans une même image**/
+      Mat input[3];
+      input[0] = HS;
+      input[1] = grass;
+      input[2] = countour;
+      Mat output;
+      merge(input,3,output);
+      if(!bench)
+		imshow("output",output);
+      
+      /************On cherche les poteaux précisément grâce à la fonction patchAll3**************/
+      Mat last;
+      patchAll3(grass, HS, countour, last, 10);
+      
+      /*****On effectue une dilation sur l'image retournée par patchAll3 *******/
+      Mat element = getStructuringElement(MORPH_ELLIPSE, Size(5,5), Point(0, 0) );
+      dilate(last,last,element);
+      if(!bench)
+		imshow("last",last);
+	  /**** On entoure les zones correspondant à la zone des poteaux trouvées *****/
+      contourBlob(last,image);
+      
+      progress = (float)image_counter/(float)images.size();
+      progressBar();
+      }
+      
+      progress = (float)image_counter/(float)images.size();
+      progressBar();
+      if(!bench)
+      {
+		  imshow("origin",image);
+		  waitKey();
+	  }
+    }
+    clock_t end = clock();
+    double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+    
+    if(bench)
+    {
+		cout << "Numbers of pictures : " << images.size() << endl;
+		cout << "Computing time : " << elapsed_secs << "s" <<endl;
+		cout << "Time per images : " << elapsed_secs/images.size() << "s" << endl;
+		cout << "Frames per seconds : " << 1.0/(elapsed_secs/images.size()) << endl;
+	}
+    exit(EXIT_SUCCESS);
+}
+
+/**
+ * Fonction qui sera appelé lorsque le nombre de paramètres utilisé pour appelé le programme est incorrecte
+ * @param s Le nom du programme
+ */
+void usage (const char *s) {
+  cerr << "Usage " << s << "FileFolder" << "option"<< endl;
+  cerr << "option : s (see all pipeline pictures) or b (No images display, use for benchmark)" << endl;
+  exit(EXIT_FAILURE);
+}
+
+/**
+ * Fonction principale du programme 
+ */
+int main(int argc, char* argv[]) {
+  if (argc != (param+1))
+    usage(argv[0]);
+  init(argv[1]);
+  process(argv[2]);
+  return EXIT_SUCCESS;
+}
+
+
+
+/**
  * Description
  * @param grass
  * @param current
@@ -508,155 +663,3 @@ void grassProcessing(const Mat grass, Mat & dst)  {
   imshow("biggest_green",biggest);
 }
 	
-/**
- * Cette fonction va gérer l'affichage de la barre de progression
- * */
-void progressBar() {
-    int barWidth = 70;
-	
-    std::cout << "[";
-    int pos = barWidth * progress;
-    for (int i = 0; i < barWidth; ++i) {
-        if (i < pos) std::cout << "=";
-        else if (i == pos) std::cout << ">";
-        else std::cout << " ";
-    }
-    std::cout << "] " << int(progress * 100.0) << " %\r";
-    std::cout.flush();
-	
-
-std::cout << std::endl;
-}
-
-/**
- * Cette fonction va réaliser tout le processus de détections des buts
- * @param benchmark Option permettant de spécifier si l'on veut le type d'affichage voulue
- * 
- * */
-void process(String benchmark) {
-  clock_t begin = clock();
-  bool bench;
-    
-  if(benchmark == "b")
-  {
-	  bench = true;
-  }
-  else if(benchmark == "s")
-  {
-	  bench = false;
-  }
-  else
-  {
-	  cerr << "Wrong option" << endl;
-	  exit(EXIT_FAILURE);
-  }
-  
-  
-  while(1)
-    {
-	  
-      Mat image;
-      int found = getNextMatrix(image);
-      if (found == 0)
-	break;
-
-      /************ Ajout d'une bordure de pixels noirs à l'image *****************************/
-      copyMakeBorder(image,image,bordure,bordure,bordure,bordure,BORDER_CONSTANT,Scalar(0,0,0));
-
-      /************ Détection de composante couleur de l'image *******************/
-      
-      
-      /** Détection des poteaux des buts (zones blanches de l'image) **/
-      Mat hsv,HS;
-      cvtColor(image,hsv,CV_BGR2HSV);
-      inRange(hsv, Scalar(20, 175, 0), Scalar(255, 255, 255), HS); //Threshold the image
-      Mat elementB = getStructuringElement(MORPH_ELLIPSE, Size(4,4), Point(0, 0) );
-      erode(HS,HS,elementB);
-      
-      /** Détection de l'herbe (zone verte de l'image **/
-      Mat grass;
-      detectionGrass(image,grass);
-      medianBlur(grass,grass,7);
-      
-      //imshow("grass", grass);
-      /** Opération morphologique sur l'herbe afin d'obtenir une zone la plus lisse possible **/
-      Mat element = getStructuringElement(MORPH_ELLIPSE, Size(10,10), Point(0, 0) );
-      erode(grass,grass,element);
-      erode(grass,grass,element);
-      dilate(grass,grass,element);
-      dilate(grass,grass,element);
-
-      /*** Si trops d'herbe autour, le robot regarde à ses pieds et donc peu de chance d'y voir un poteau ***/
-      if ( !tooMuchGrass(grass)) {
-		  
-	  /********* Détection des contours du terrain ************/
-      Mat countour;
-      contoursTerrain(grass,countour);
-      
-      /******** On merge les trois composantes : Herbes, Poteaux (zone blanches) et contour du terraind ans une même image**/
-      Mat input[3];
-      input[0] = HS;
-      input[1] = grass;
-      input[2] = countour;
-      Mat output;
-      merge(input,3,output);
-      if(!bench)
-		imshow("output",output);
-      
-      /************On cherche les poteaux précisément grâce à la fonction patchAll3**************/
-      Mat last;
-      patchAll3(grass, HS, countour, last, 10);
-      
-      /*****On effectue une dilation sur l'image retournée par patchAll3 *******/
-      Mat element = getStructuringElement(MORPH_ELLIPSE, Size(5,5), Point(0, 0) );
-      dilate(last,last,element);
-      if(!bench)
-		imshow("last",last);
-	  /**** On entoure les zones correspondant à la zone des poteaux trouvées *****/
-      contourBlob(last,image);
-      
-      progress = (float)image_counter/(float)images.size();
-      progressBar();
-      }
-      
-      progress = (float)image_counter/(float)images.size();
-      progressBar();
-      if(!bench)
-      {
-		  imshow("origin",image);
-		  waitKey();
-	  }
-    }
-    clock_t end = clock();
-    double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-    
-    if(bench)
-    {
-		cout << "Numbers of pictures : " << images.size() << endl;
-		cout << "Computing time : " << elapsed_secs << "s" <<endl;
-		cout << "Time per images : " << elapsed_secs/images.size() << "s" << endl;
-		cout << "Frames per seconds : " << 1.0/(elapsed_secs/images.size()) << endl;
-	}
-    exit(EXIT_SUCCESS);
-}
-
-/**
- * Fonction qui sera appelé lorsque le nombre de paramètres utilisé pour appelé le programme est incorrecte
- * @param s Le nom du programme
- */
-void usage (const char *s) {
-  cerr << "Usage " << s << "FileFolder" << "option"<< endl;
-  cerr << "option : s (see all pipeline pictures) or b (No images display, use for benchmark)" << endl;
-  exit(EXIT_FAILURE);
-}
-
-/**
- * Fonction principale du programme 
- */
-int main(int argc, char* argv[]) {
-  if (argc != (param+1))
-    usage(argv[0]);
-  init(argv[1]);
-  process(argv[2]);
-  return EXIT_SUCCESS;
-}
