@@ -123,6 +123,7 @@ void contoursTerrain(const Mat src, Mat &dst)
   }
   drawing.copyTo(dst);
 }
+
 void detectionCouleur(const Mat im, Mat &dst)
 {
 	 Mat imgTh;

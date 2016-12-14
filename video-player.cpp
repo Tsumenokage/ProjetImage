@@ -7,15 +7,32 @@
 #include <ctime>
 #include <list>
 
+/** @file */ 
+
 using namespace cv;
 using namespace std;
 
-float progress = 0.0;
-vector<Mat> images;
-unsigned int image_counter;
-RNG rng(12345);
-int bordure = 5;
+#define param 2 /**< Nombre de paramètres attendus lors de l'appel du programme */
 
+float progress = 0.0; /**< Variable utilisé pour la barre de progression */
+vector<Mat> images; /**< Vecteur contenant l'ensemble des images du dossier passé en paramètre */
+unsigned int image_counter; /**< Entier qui va compter le nombre d'image traité */
+RNG rng(12345); /**< Cette variable sera utilisé pour générer aléatoirement des coleurs */
+int bordure = 5; /**< Nombre depixel rajouté en bordure de l'image */
+
+/**
+ * Structure permettant de définir un point
+ * */
+struct cPoint {
+  int x; /** < Entier correspondant à l'abscisse du point */
+  int y; /** < Entier correspondant à lordonnée du point*/
+};
+
+/**
+ * Description
+ * @param image
+ * @return 
+ **/
 int hasValue(Mat image) {
   int count = 0;
   if (image.cols == 0 || image.rows == 0) {
@@ -30,6 +47,15 @@ int hasValue(Mat image) {
   return count;
 }
 
+/**
+ * Description
+ * @param image
+ * @param cols
+ * @param rows
+ * @param radius
+ * @return 
+ * 
+ **/
 Mat getPixelMatrix(Mat image, int cols, int rows, int radius) {
   int minC, maxC, minR, maxR;
   
@@ -43,7 +69,13 @@ Mat getPixelMatrix(Mat image, int cols, int rows, int radius) {
   return submatrix;
 }
 
-/* follow src3, ignore src1 */
+/**
+ * Description
+ * @param src1
+ * @param src2
+ * @param src3
+ * @param dst
+ * */
 void patchAll3(const Mat src1, const Mat src2, const Mat src3, Mat& dst) {
   int taille_patch = 10;
   src1.copyTo(dst);
@@ -63,31 +95,31 @@ void patchAll3(const Mat src1, const Mat src2, const Mat src3, Mat& dst) {
   }
 }
 
+/**
+ * Cette fonction va chercher les contours du terrain
+ * @param src Matrice correspondant à l'image dont on veut extraire les contours du terrain
+ * @param dst Image permettant d'afficher le contour du terrain
+ * 
+ * */
 void contoursTerrain(const Mat src, Mat &dst)
 {
-  int threshCanny = 100;
-  vector<vector<Point> > contours;
-  Mat detectionTerrainCanny;
+  int threshCanny = 100; //Seuil utilisé pour la detection des bords
+  vector<vector<Point> > contours; //Matrice de Matrice de points qui contiendras les contours trouvé dans l'image
+  Mat detectionTerrainCanny; //Image des bords détectés.
   vector<Vec4i> hierarchy;
-  int perimeters = 0;
-  int cntIndex = 0;
+  int perimeters = 0; //Plus grand périmètre parmis les contours
+  int cntIndex = 0; //Index du plus grands contours
   Mat approxM;
-  /*
-  Mat dilateC;
-  int element_shape = MORPH_ELLIPSE;
-  Mat element = getStructuringElement(element_shape, Size(11,11), Point(0, 0) );
-  dilate( src, dilateC, element );
-  detectionTerrainCanny = dilateC-src;
-  */
 
+  //Utilisation de Canny pour détecter les bords puis détection des contours
   Canny( src, detectionTerrainCanny, threshCanny, threshCanny*2, 3 );
   findContours( detectionTerrainCanny, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
-  
+  //Utilisation d'un algorithme de Hull pour trouver les enveloppes convexes
   vector<vector<Point> >hull( contours.size());
    for( unsigned int i = 0; i < contours.size(); i++ )
       {  convexHull( Mat(contours[i]), hull[i], false );}
   
-     /// Draw contours + hull results
+   //Dessin de l'ensemble des enveloppes convexes trouvées
    Mat hullP = Mat::zeros( src.size(), CV_8UC3 );
    for( unsigned int i = 0; i< contours.size(); i++ )
       {
@@ -96,7 +128,7 @@ void contoursTerrain(const Mat src, Mat &dst)
         drawContours( hullP, hull, i, color, 1, 8, vector<Vec4i>(), 0, Point() );
       }
    imshow( "Hull demo", hullP );
-  
+  //On cherche la plus grande enveloppe convexe
   for( unsigned int i = 0; i <hull.size();i++)
     {
 		  int tmpperimeter = arcLength(hull[i],1);
@@ -135,6 +167,13 @@ void contoursTerrain(const Mat src, Mat &dst)
     drawing.copyTo(dst);
   }
 }
+
+/**
+ * Description
+ * @param im
+ * @param dst
+ * 
+ * */
 void detectionCouleur(const Mat im, Mat &dst)
 {
 	 Mat imgTh;
@@ -157,25 +196,45 @@ void detectionCouleur(const Mat im, Mat &dst)
 
 }
 
-void init() {
+/**
+ * Description
+ * @param folder
+ * */
+void init(String folder) {
+	cout << "Initialization" << endl;
+  
+  
+    cv::String path(folder + "/*.png"); //select only jpg
+	vector<cv::String> fn;
+	glob(path,fn,true); // recurse
+	for (size_t k=0; k<fn.size(); ++k)
+	{
+		 cv::Mat im = cv::imread(fn[k]);
+		 if (im.empty()) continue; //only proceed if sucsessful
+		 // you probably want to do some preprocessing
+		 images.push_back(im);
+	}
+	/*
   cout << "Initialization" << endl;
   image_counter = 1;
   ifstream img_list;
   string image;
-  img_list.open("./images/log1/log1.txt");
+  img_list.open("./images/log2/log2.txt");
   if (img_list.is_open()) {
     while ( getline (img_list,image) ) {
-      Mat M = imread("./images/log1/"+image);
+      Mat M = imread("./images/log2/"+image);
       images.push_back ( M );
     }
     img_list.close();
   }
-  //cout << images.size() << " images found" << endl;
+  //cout << images.size() << " images found" << endl;*/
 }
 
-/*
- * Grass is threashold matrix
- */
+/**
+ * Description
+ * @param grass
+ * @return
+ * */
 bool tooMuchGrass(const Mat grass) {
   int green_pixel = 0;
   for (int i=0;i<grass.cols;i++) {
@@ -210,7 +269,11 @@ bool tooMuchGrass(const Mat grass) {
   return false;
 }
 
-
+/**
+ * Descrpition
+ * @param M
+ * @return 
+ * */
 int getNextMatrix(Mat& M) {
 
   if (image_counter < images.size()) {
@@ -223,6 +286,14 @@ int getNextMatrix(Mat& M) {
   }
 
 }
+
+/**
+ * Description
+ * @param src
+ * @param dst
+ * @param min
+ * @param max
+ * */
 void thBetween(const Mat src, Mat& dst, int min, int max) {
   src.copyTo(dst);
   for(int i=0;i<src.rows;i++) {
@@ -237,6 +308,13 @@ void thBetween(const Mat src, Mat& dst, int min, int max) {
   }
 }
 
+/**
+ * Description
+ * @param src1
+ * @param src2
+ * @param dst
+ * 
+ * */
 void thAnd(const Mat src1, const Mat src2, Mat &dst) {
   src1.copyTo(dst);
   for(int i=0;i<src1.rows;i++) {
@@ -252,6 +330,12 @@ void thAnd(const Mat src1, const Mat src2, Mat &dst) {
   }
 }
 
+/**
+ * Description
+ * @param src
+ * @param originale
+ * 
+ * */
 void contourBlob(Mat src, Mat originale)
 {
 	vector<vector<Point> > contours;
@@ -276,6 +360,15 @@ void contourBlob(Mat src, Mat originale)
 	
 }
 
+/**
+ * Description
+ * @param grass
+ * @param current
+ * @param color_pixel
+ * @param x
+ * @param y
+ * @return
+ * */
 int zoneColor(const Mat grass, Mat& current, int color_pixel, int x, int y) {
   list<int> abs;
   list<int> ord;
@@ -321,17 +414,26 @@ int zoneColor(const Mat grass, Mat& current, int color_pixel, int x, int y) {
   return size;
 }
 
-struct cPoint {
-  int x;
-  int y;
-};
-
+/**
+ * Description
+ * @param c
+ * @param q
+ * @param r
+ * @return
+ * */
 int orientation(cPoint p, cPoint q, cPoint r) {
   int val = (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
   if (val == 0)
     return 0;
   return (val>0) ? 1:2;
 }
+
+/**
+ * Description
+ * @param points
+ * @param n
+ * @param grass
+ * */
 void jarvisSlave(cPoint points[], int n, const Mat grass) {
   cout << "begin slave" << endl;
   if(n<3) return;
@@ -374,7 +476,12 @@ void jarvisSlave(cPoint points[], int n, const Mat grass) {
   }
   imshow("jarvis",jarvis_mat);
 }
-	
+
+/**
+ * Description
+ * @param grass
+ * @param size
+ * */	
 void jarvis(const Mat grass, int size) {
   cPoint points[size];
   int cur = 0;
@@ -390,7 +497,11 @@ void jarvis(const Mat grass, int size) {
   jarvisSlave(points,size,grass);
 }
 
-
+/**
+ * Description
+ * @param grass
+ * @param dst
+ * */
 void grassProcessing(const Mat grass, Mat & dst)  {
   Mat current;
   current = Mat::zeros( grass.size(), CV_8UC1);
@@ -429,8 +540,9 @@ void grassProcessing(const Mat grass, Mat & dst)  {
   imshow("biggest_green",biggest);
 }
 	
-
-
+/**
+ * Description 
+ * */
 void progressBar()
 {
     int barWidth = 70;
@@ -449,10 +561,32 @@ void progressBar()
 std::cout << std::endl;
 }
 
-void process() {
+/**
+ * Descrption
+ * @param benchmark
+ * 
+ * */
+void process(String benchmark) {
   //int cptG = 0;
   //int cptB = 0;
   clock_t begin = clock();
+  
+   bool bench;
+    
+  if(benchmark == "b")
+  {
+	  bench = true;
+  }
+  else if(benchmark == "s")
+  {
+	  bench = false;
+  }
+  else
+  {
+	  cerr << "Wrong option" << endl;
+	  exit(EXIT_FAILURE);
+  }
+  
   while(1)
     {
 	  
@@ -469,8 +603,9 @@ void process() {
       Mat hsv,HS;
       cvtColor(image,hsv,CV_BGR2HSV);
       inRange(hsv, Scalar(20, 175, 0), Scalar(255, 255, 255), HS); //Threshold the image
-      erode(HS,HS,cv::Mat());
-      dilate(HS,HS,cv::Mat());
+      Mat elementB = getStructuringElement(MORPH_ELLIPSE, Size(4,4), Point(0, 0) );
+      erode(HS,HS,elementB);
+      //dilate(HS,HS,elementB);
       /*
       Mat HSV[3];
       split(hsv,HSV);
@@ -491,14 +626,15 @@ void process() {
       /** find grass **/
       Mat grass;
       detectionCouleur(image,grass);
-      grassProcessing(grass,grass); 
+      //grassProcessing(grass,grass); 
       medianBlur(grass,grass,7);
       
       //imshow("grass", grass);
-      
-      erode(grass,grass,cv::Mat());
-      erode(grass,grass,cv::Mat());
-      dilate(grass,grass,cv::Mat());
+      Mat element = getStructuringElement(MORPH_ELLIPSE, Size(10,10), Point(0, 0) );
+      erode(grass,grass,element);
+      erode(grass,grass,element);
+      dilate(grass,grass,element);
+      dilate(grass,grass,element);
       /*
       dilate(grass,grass,cv::Mat());
       dilate(grass,grass,cv::Mat());
@@ -515,44 +651,62 @@ void process() {
       input[2] = countour;
       Mat output;
       merge(input,3,output);
-      imshow("output",output);
+      if(!bench)
+		imshow("output",output);
 		
       Mat last;
       patchAll3(grass, HS, countour, last);
       Mat element = getStructuringElement(MORPH_ELLIPSE, Size(5,5), Point(0, 0) );
       dilate(last,last,element);
-      imshow("last",last);
+      if(!bench)
+		imshow("last",last);
       contourBlob(last,image);
       
-      /************* HoughLines *******************/
       
       //imshow("origin",image);
       //waitKey();
       progress = (float)image_counter/(float)images.size();
       progressBar();
       }
-      imshow("origin",image);
-      waitKey();
+      
+      progress = (float)image_counter/(float)images.size();
+      progressBar();
+      if(!bench)
+      {
+		  imshow("origin",image);
+		  waitKey();
+	  }
     }
     clock_t end = clock();
     double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
     
-    cout << "Numbers of pictures : " << images.size() << endl;
-    cout << "Computing time : " << elapsed_secs << "s" <<endl;
-    cout << "Time per images : " << elapsed_secs/images.size() << "s" << endl;
-    cout << "Frames per seconds : " << 1.0/(elapsed_secs/images.size()) << endl;
+    if(bench)
+    {
+		cout << "Numbers of pictures : " << images.size() << endl;
+		cout << "Computing time : " << elapsed_secs << "s" <<endl;
+		cout << "Time per images : " << elapsed_secs/images.size() << "s" << endl;
+		cout << "Frames per seconds : " << 1.0/(elapsed_secs/images.size()) << endl;
+	}
+    exit(EXIT_SUCCESS);
 }
 
+/**
+ * Fonction qui sera appelé lorsque le nombre de paramètres utilisé pour appelé le programme est incorrecte
+ * @param s Le nom du programme
+ */
 void usage (const char *s) {
-  cerr << "Usage " << s << endl;
+  cerr << "Usage " << s << "FileFolder" << "option"<< endl;
+  cerr << "option : s (see all pipeline pictures) or b (No images display, use for benchmark)" << endl;
   exit(EXIT_FAILURE);
 }
 
-#define param 0
+/**
+ * Fonction principale du programme 
+ */
 int main(int argc, char* argv[]) {
   if (argc != (param+1))
     usage(argv[0]);
-  init();
-  process();
+  init(argv[1]);
+  process(argv[2]);
   return EXIT_SUCCESS;
 }
