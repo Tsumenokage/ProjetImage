@@ -140,11 +140,12 @@ void contoursTerrain(const Mat src, Mat &dst)
       
     }
   
-  /// Draw contours
+  //On dessine uniquement l'enveloppe convexe avec le plus grand périmètre
   Mat drawing = Mat::zeros( detectionTerrainCanny.size(), CV_8UC3 );
   Scalar color = Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );     
   drawContours( drawing, hull, cntIndex, color, 2, 8, hierarchy, 0, Point() );
 
+  
   cvtColor(drawing,drawing,CV_BGR2GRAY);
   for(int i=0;i<drawing.rows;i++) {
     for(int j=0;j<drawing.cols;j++) {
@@ -169,15 +170,16 @@ void contoursTerrain(const Mat src, Mat &dst)
 }
 
 /**
- * Description
- * @param im
- * @param dst
+ * Cette fonction va chercher l'ensemble de l'herbe dans une image passé en paramètre
+ * @param im Image dont on veut extraire l'herbe
+ * @param dst Image binaire dont les zones blanches correspondront à l'herbe trouvé dans im
  * 
  * */
-void detectionCouleur(const Mat im, Mat &dst)
+void detectionGrass(const Mat im, Mat &dst)
 {
 	 Mat imgTh;
 	 Mat imHSV;
+	 //Définition des valeurs min et max de H,S et V pour détecter l'herbe
 	 int iLowH = 22;
 	 int iHighH = 60;
 
@@ -186,19 +188,17 @@ void detectionCouleur(const Mat im, Mat &dst)
 
 	 int iLowV = 40;
 	 int iHighV = 175;
+	 //Converstion de l'image du format BGR a HSV
 	 cvtColor(im,imHSV,CV_BGR2HSV);
-	 inRange(imHSV, Scalar(iLowH, iLowS, iLowV), Scalar(iHighH, iHighS, iHighV), imgTh); //Threshold the image
-	 
-	 //Hough(im,imgTh);
-	 
-	 //imshow("couleur",imgTh);
+	 //Algorithme de recherche d'une plage de couleur dans une image
+	 inRange(imHSV, Scalar(iLowH, iLowS, iLowV), Scalar(iHighH, iHighS, iHighV), imgTh);
 	 imgTh.copyTo(dst);
 
 }
 
 /**
- * Description
- * @param folder
+ * Cette fonction va charger l'ensemble des images dans le dossier passé en paramètres
+ * @param folder String correspondant au dossier ou seront cherché les images
  * */
 void init(String folder) {
 	cout << "Initialization" << endl;
@@ -231,11 +231,14 @@ void init(String folder) {
 }
 
 /**
- * Description
- * @param grass
- * @return
+ * Cette fonction va vérifier la présence d'herbe sur les bords de l'image. Cette fonction est utilisée 
+ * pour vérifier si le robot ne regarde pas a ces pieds et donc ne voit pas les bords du terrain
+ * @param grass Une image binaire représentant l'endroit ou se trouve l'herbe
+ * @return Un booléen qui vaudra vrai si il y'a trop d'herbe en bordure de l'image (cela signie que le robot regarde
+ * à ces pieds) où false dans le cas contraire 
  * */
 bool tooMuchGrass(const Mat grass) {
+  //On va compter l'ensemble des pixels blancs présents en bordure de l'image
   int green_pixel = 0;
   for (int i=0;i<grass.cols;i++) {
 	  cout << "first "<<i<<endl;
@@ -261,7 +264,9 @@ bool tooMuchGrass(const Mat grass) {
       green_pixel++;
   }
   int max_pixel = 4 * (grass.cols-(bordure*2) + grass.rows-(bordure*2));
-  cout << "green "<< ((float)green_pixel)/max_pixel << endl;
+  
+  //cout << "green "<< ((float)green_pixel)/max_pixel << endl;
+  
   imshow("grass",grass);
  
   if (green_pixel > 0.8 * max_pixel)
@@ -270,9 +275,9 @@ bool tooMuchGrass(const Mat grass) {
 }
 
 /**
- * Descrpition
- * @param M
- * @return 
+ * Cette fonction va permettre d'obtenir l'image suivante dans la liste d'image a traiter
+ * @param M Matrice passé en référence qui contiendra l'image suivante 
+ * @return Un entier valant 0 si on arrive à la fin de la liste d'image et 1 dans le cas inverse 
  * */
 int getNextMatrix(Mat& M) {
 
@@ -331,20 +336,25 @@ void thAnd(const Mat src1, const Mat src2, Mat &dst) {
 }
 
 /**
- * Description
- * @param src
- * @param originale
+ * Cette fonction va prendre une image binaire passé en paramètre  et va chercher les zones blanches qui correspondent à la base des
+ * poteaux détectés. Elle va ensuite entourer ces zones avec des cercles rouges sur l'image d'origine
+ * @param src Image binaire représantant les zones ou sont detectés le ou les poteaux des buts
+ * @param originale Image originale ou seront dessiné les cercles
  * 
  * */
 void contourBlob(Mat src, Mat originale)
 {
 	vector<vector<Point> > contours;
 	vector<Vec4i> hierarchy;
+	
+	//On cherche les contours de chaque zone blanches correspondant à un poteaux
 	findContours( src, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
 	vector<Point> centers;
 	vector<float> radiuss;
+	//Si on trouve pas trops de zone correspondant à des poteaux 
 	if(contours.size() <= 300)
 	{
+		//On dessine un cercle autour de chaque zone
 		for (unsigned int i = 0; i < contours.size(); i++)
 		{
 			Point2f center;
@@ -352,7 +362,7 @@ void contourBlob(Mat src, Mat originale)
 			minEnclosingCircle(contours[i],center,radius);
 			centers.push_back(center);
 			radiuss.push_back(radius);
-			circle(originale, center, (int)radius*5, Scalar(0,0,255));
+			circle(originale, center, 40, Scalar(0,0,255));
 		}
 		
 		
@@ -541,7 +551,7 @@ void grassProcessing(const Mat grass, Mat & dst)  {
 }
 	
 /**
- * Description 
+ * Cette fonction va gérer l'affichage de la barre de progression
  * */
 void progressBar()
 {
@@ -562,16 +572,13 @@ std::cout << std::endl;
 }
 
 /**
- * Descrption
- * @param benchmark
+ * Cette fonction va réaliser tout le processus de détections des buts
+ * @param benchmark Option permettant de spécifier si l'on veut le type d'affichage voulue
  * 
  * */
 void process(String benchmark) {
-  //int cptG = 0;
-  //int cptB = 0;
   clock_t begin = clock();
-  
-   bool bench;
+  bool bench;
     
   if(benchmark == "b")
   {
@@ -586,6 +593,7 @@ void process(String benchmark) {
 	  cerr << "Wrong option" << endl;
 	  exit(EXIT_FAILURE);
   }
+  
   
   while(1)
     {
@@ -605,28 +613,10 @@ void process(String benchmark) {
       inRange(hsv, Scalar(20, 175, 0), Scalar(255, 255, 255), HS); //Threshold the image
       Mat elementB = getStructuringElement(MORPH_ELLIPSE, Size(4,4), Point(0, 0) );
       erode(HS,HS,elementB);
-      //dilate(HS,HS,elementB);
-      /*
-      Mat HSV[3];
-      split(hsv,HSV);
-      Mat new_h;
-      Mat new_S;
-      thBetween(HSV[0],new_h,23,30);
-      Mat element = getStructuringElement(MORPH_ELLIPSE, Size(4,4), Point(0, 0) );
-      erode(new_h,new_h,element);
-      //threshold( HSV[0], HSV[0], 20, 255, 0 );
-      //imshow("H",new_h);
-      thBetween(HSV[1],new_S,170,255);
 
-      Mat HS;
-      thAnd(new_h,new_S,HS);
-      erode(HS,HS,cv::Mat());
-      dilate(HS,HS,cv::Mat());
-      */
       /** find grass **/
       Mat grass;
-      detectionCouleur(image,grass);
-      //grassProcessing(grass,grass); 
+      detectionGrass(image,grass);
       medianBlur(grass,grass,7);
       
       //imshow("grass", grass);
@@ -635,16 +625,11 @@ void process(String benchmark) {
       erode(grass,grass,element);
       dilate(grass,grass,element);
       dilate(grass,grass,element);
-      /*
-      dilate(grass,grass,cv::Mat());
-      dilate(grass,grass,cv::Mat());
-      */
+
       /*** if too much grass on the corner , no posts ***/
       if ( !tooMuchGrass(grass)) {
-	//grassProcessing(grass);
       Mat countour;
       contoursTerrain(grass,countour);
-      //imshow("contour", countour);
       Mat input[3];
       input[0] = HS;
       input[1] = grass;
@@ -662,9 +647,6 @@ void process(String benchmark) {
 		imshow("last",last);
       contourBlob(last,image);
       
-      
-      //imshow("origin",image);
-      //waitKey();
       progress = (float)image_counter/(float)images.size();
       progressBar();
       }
