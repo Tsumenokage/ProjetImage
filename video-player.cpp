@@ -17,7 +17,7 @@ using namespace std;
 float progress = 0.0; /**< Variable utilisé pour la barre de progression */
 vector<Mat> images; /**< Vecteur contenant l'ensemble des images du dossier passé en paramètre */
 unsigned int image_counter; /**< Entier qui va compter le nombre d'image traité */
-RNG rng(12345); /**< Cette variable sera utilisé pour générer aléatoirement des coleurs */
+RNG rng(12345); /**< Cette variable sera utilisé pour générer aléatoirement des couleurs */
 int bordure = 5; /**< Nombre depixel rajouté en bordure de l'image */
 
 /**
@@ -29,9 +29,9 @@ struct cPoint {
 };
 
 /**
- * Description
- * @param image
- * @return 
+ * Cette fonction renvoie le nombre de pixel non nul d'une image binaire.
+ * @param image, une image binaire
+ * @return le nombre de pixels non nul de l'image binaire
  **/
 int hasValue(Mat image) {
   int count = 0;
@@ -48,12 +48,12 @@ int hasValue(Mat image) {
 }
 
 /**
- * Description
- * @param image
- * @param cols
- * @param rows
- * @param radius
- * @return 
+ * Récupére tous les pixels contenus dans un carré de coté 2*radius+1 centré sur un pixel de coordonnées désirées sous force de matrice
+ * @param image, l'image source
+ * @param cols, l'abscisse du pixel sur lequel sera centrée le carré
+ * @param rows, l'ordonnée du pixel sur lequel sera centrée le carré
+ * @param radius, le rayon de la sous-matrice 
+ * @return une matrice de taille au moins 2*radius+1
  * 
  **/
 Mat getPixelMatrix(Mat image, int cols, int rows, int radius) {
@@ -70,29 +70,32 @@ Mat getPixelMatrix(Mat image, int cols, int rows, int radius) {
 }
 
 /**
- * Description
+ * Par référence, renvoie une matrice binaire de même taille que les 3 autres matrices en paramètres.
  * @param src1
  * @param src2
  * @param src3
  * @param dst
+ * @param taille_patch
  * */
-void patchAll3(const Mat src1, const Mat src2, const Mat src3, Mat& dst) {
-  int taille_patch = 10;
+void patchAll3(const Mat src1, const Mat src2, const Mat src3, Mat& dst, int taille_patch) {
   src1.copyTo(dst);
   dst = Mat::zeros( src1.size(), CV_8UC1);
+  int found = 0;
   for(int i=0;i<src1.rows;i++) {
     for(int j=0;j<src1.cols;j++) {
       if( (int) src3.at<uchar>(i,j) == 255) {
 	Mat pix1 = getPixelMatrix(src1,j,i,taille_patch);
 	Mat pix2 = getPixelMatrix(src2,j,i,taille_patch);
 	Mat pix3 = getPixelMatrix(src3,j,i,taille_patch);
-	if( (hasValue(pix1) == 0) && (hasValue(pix2) >100) && (hasValue(pix3) > 50)) {
+	if( (hasValue(pix1) == 0) && (hasValue(pix2) > taille_patch*10) && (hasValue(pix3) > taille_patch*5)) {
 	  dst.at<uchar>(i,j) = 255;
 	  cout << hasValue(pix1) << " " << hasValue(pix2) << " " << hasValue(pix3) <<endl;
+          found = 1;
 	} 
       }
     }
   }
+  if (!found && taille_patch == 10) patchAll3(src1,src2,src3,dst,5);
 }
 
 /**
@@ -285,49 +288,6 @@ int getNextMatrix(Mat& M) {
     return 0;
   }
 
-}
-
-/**
- * Description
- * @param src
- * @param dst
- * @param min
- * @param max
- * */
-void thBetween(const Mat src, Mat& dst, int min, int max) {
-  src.copyTo(dst);
-  for(int i=0;i<src.rows;i++) {
-    for(int j=0;j<src.cols;j++) {
-      int pixel = (int) src.at<uchar>(i,j);
-      if( min <= pixel && max >= pixel) {
-        dst.at<uchar>(i,j) = 255;
-      } else {
-        dst.at<uchar>(i,j) = 0;
-      }
-    }
-  }
-}
-
-/**
- * Description
- * @param src1
- * @param src2
- * @param dst
- * 
- * */
-void thAnd(const Mat src1, const Mat src2, Mat &dst) {
-  src1.copyTo(dst);
-  for(int i=0;i<src1.rows;i++) {
-    for(int j=0;j<src1.cols;j++) {
-      int pixel1 = (int) src1.at<uchar>(i,j);
-      int pixel2 = (int) src2.at<uchar>(i,j);
-      if( pixel1 == 255 && pixel2 == 255) {
-        dst.at<uchar>(i,j) = 255;
-      } else {
-        dst.at<uchar>(i,j) = 0;
-      }
-    }
-  }
 }
 
 /**
@@ -606,23 +566,6 @@ void process(String benchmark) {
       Mat elementB = getStructuringElement(MORPH_ELLIPSE, Size(4,4), Point(0, 0) );
       erode(HS,HS,elementB);
       //dilate(HS,HS,elementB);
-      /*
-      Mat HSV[3];
-      split(hsv,HSV);
-      Mat new_h;
-      Mat new_S;
-      thBetween(HSV[0],new_h,23,30);
-      Mat element = getStructuringElement(MORPH_ELLIPSE, Size(4,4), Point(0, 0) );
-      erode(new_h,new_h,element);
-      //threshold( HSV[0], HSV[0], 20, 255, 0 );
-      //imshow("H",new_h);
-      thBetween(HSV[1],new_S,170,255);
-
-      Mat HS;
-      thAnd(new_h,new_S,HS);
-      erode(HS,HS,cv::Mat());
-      dilate(HS,HS,cv::Mat());
-      */
       /** find grass **/
       Mat grass;
       detectionCouleur(image,grass);
@@ -655,7 +598,7 @@ void process(String benchmark) {
 		imshow("output",output);
 		
       Mat last;
-      patchAll3(grass, HS, countour, last);
+      patchAll3(grass, HS, countour, last, 10);
       Mat element = getStructuringElement(MORPH_ELLIPSE, Size(5,5), Point(0, 0) );
       dilate(last,last,element);
       if(!bench)
