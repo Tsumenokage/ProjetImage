@@ -538,7 +538,7 @@ int orientation(cPoint p, cPoint q, cPoint r) {
 }
 
 /**
- * Implémentation de la marche de Jarvis permettant de trouver et d'afficher l'enveloppe connexe d'un ensemble de points. Cette fonction n'est pas utilisée en effet sa complexité dépend linéairement du nombre de points à traiter, environ 300 000 points, rend la durée de traitement trop grande.
+ * Implémentation de la marche de Jarvis permettant de trouver et d'afficher l'enveloppe connexe d'un ensemble de points. Cette fonction n'est pas utilisée en effet un bug a été découvert et par le manque de temps, nous avons stoppé le développement de cette méthode. A l'initialisation de l'algorithme, on place le pixel le plus à gauche dans la liste des points de l'enveloppe. Or l'algorithme s'arrête quand il retombe sur ce point. Mais comme la plupart des points sont alignés, l'algorithme retombe rarement sur ce point et boucle indéfiniment.
  * @param points tableau des points 
  * @param n taille du tableau
  * @param grass image binaire source
