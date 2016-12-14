@@ -13,7 +13,7 @@ float progress = 0.0;
 vector<Mat> images;
 unsigned int image_counter;
 RNG rng(12345);
-int bordure = 10;
+int bordure = 5;
 
 int hasValue(Mat image) {
   int val=0;
@@ -143,6 +143,7 @@ void detectionCouleur(const Mat im, Mat &dst)
 }
 
 void init() {
+  cout << "Initialization" << endl;
   image_counter = 1;
   ifstream img_list;
   string image;
@@ -294,7 +295,7 @@ void process() {
 	break;
 
       
-      copyMakeBorder(image,image,10,10,10,10,BORDER_CONSTANT,Scalar(0,0,0));
+      copyMakeBorder(image,image,bordure,bordure,bordure,bordure,BORDER_CONSTANT,Scalar(0,0,0));
       //Hough(image);
       /************ convert a BGR ->  Grey *******************/
       Mat grey;
@@ -302,7 +303,7 @@ void process() {
       threshold( grey, grey, 120, 255, 0 );
  
       
-      imshow("seuil", grey);
+      //imshow("seuil", grey);
       
       /************ show BGR channels *******************/
 
@@ -320,10 +321,12 @@ void process() {
       split(hsv,HSV);
       Mat new_h;
       Mat new_S;
-      thBetween(HSV[0],new_h,25,30);
+      thBetween(HSV[0],new_h,23,30);
+      Mat element = getStructuringElement(MORPH_ELLIPSE, Size(4,4), Point(0, 0) );
+      erode(new_h,new_h,element);
       //threshold( HSV[0], HSV[0], 20, 255, 0 );
       //imshow("H",new_h);
-      thBetween(HSV[1],new_S,180,255);
+      thBetween(HSV[1],new_S,170,255);
 
       Mat HS;
       thAnd(new_h,new_S,HS);
