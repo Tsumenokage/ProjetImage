@@ -25,8 +25,8 @@ int bordure = 5; /**< Nombre depixel rajouté en bordure de l'image */
  * @deprecated
  * */
 struct cPoint {
-  int x; /** < Entier correspondant à l'abscisse du point */
-  int y; /** < Entier correspondant à lordonnée du point*/
+  int x; /** Entier correspondant à l'abscisse du point*/
+  int y; /** Entier correspondant à lordonnée du point*/
 };
 
 /**
