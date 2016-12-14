@@ -70,15 +70,14 @@ Mat getPixelMatrix(Mat image, int cols, int rows, int radius) {
 }
 
 /**
- * Par référence, renvoie une matrice binaire de même taille que les 3 autres matrices en paramètres.
- * @param src1
- * @param src2
- * @param src3
- * @param dst
- * @param taille_patch
+ * Par référence, renvoie une matrice binaire de même taille que les 3 autres matrices en paramètres. Pour chaque pixels des 3 matrices src, le pixel associé à la matrice renvoyée est mis à 255 si en appliquant un patch de taille taille_patch: aucun pixel est à 255 sur src1 ET 10*taille_patch pixels sont à 255 sur src2 ET 5*taille_patch pixels sont à 255 sur src3. Si aucun pixels n'a été trouvé et que taille_patch est à 10, la fonction est rappelée avec taille_patch à 5.
+ * @param src1 Matrice binaire correspondant à l'herbe
+ * @param src2 Matrice binaire correspondant aux objets blancs
+ * @param src3 Matrice binaire correspondant au contours du terrain
+ * @param dst Référence vers matrice de destination 
+ * @param taille_patch taille du patch à appliquer
  * */
 void patchAll3(const Mat src1, const Mat src2, const Mat src3, Mat& dst, int taille_patch) {
-  src1.copyTo(dst);
   dst = Mat::zeros( src1.size(), CV_8UC1);
   int found = 0;
   for(int i=0;i<src1.rows;i++) {
