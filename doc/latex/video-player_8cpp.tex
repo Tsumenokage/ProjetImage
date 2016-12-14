@@ -1,0 +1,394 @@
+\hypertarget{video-player_8cpp}{}\section{Référence du fichier video-\/player.cpp}
+\label{video-player_8cpp}\index{video-\/player.\+cpp@{video-\/player.\+cpp}}
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$cstdlib$>$}\newline
+{\ttfamily \#include $<$cstdio$>$}\newline
+{\ttfamily \#include $<$dirent.\+h$>$}\newline
+{\ttfamily \#include $<$opencv2/opencv.\+hpp$>$}\newline
+{\ttfamily \#include $<$fstream$>$}\newline
+{\ttfamily \#include $<$ctime$>$}\newline
+{\ttfamily \#include $<$list$>$}\newline
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structcPoint}{c\+Point}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{video-player_8cpp_acff701cfc8fab0de8704435ba1462970}\label{video-player_8cpp_acff701cfc8fab0de8704435ba1462970}} 
+\#define {\bfseries param}~2
+\end{DoxyCompactItemize}
+\subsection*{Fonctions}
+\begin{DoxyCompactItemize}
+\item 
+R\+NG \hyperlink{video-player_8cpp_a2bb3a617236eb1bd8ace5e140f519081}{rng} (12345)
+\item 
+int \hyperlink{video-player_8cpp_a7d45bd8cb5867588c53db90cd9f2a384}{has\+Value} (Mat image)
+\item 
+Mat \hyperlink{video-player_8cpp_aed04ba0c6cd8101c6a0fbfbb01f7f212}{get\+Pixel\+Matrix} (Mat image, int cols, int rows, int radius)
+\item 
+void \hyperlink{video-player_8cpp_a9f80ae7e85756c477e38dea2fecc278d}{patch\+All3} (const Mat src1, const Mat src2, const Mat src3, Mat \&dst)
+\item 
+void \hyperlink{video-player_8cpp_ab27159545e19dba751b0be11450164be}{contours\+Terrain} (const Mat src, Mat \&dst)
+\item 
+void \hyperlink{video-player_8cpp_a5c9426cb28038e89622652e1698e9ea2}{detection\+Couleur} (const Mat im, Mat \&dst)
+\item 
+void \hyperlink{video-player_8cpp_af2babdeaf66dfac24e508efa01c230a0}{init} (String folder)
+\item 
+bool \hyperlink{video-player_8cpp_ae6327342609d01a59423d2f231d83921}{too\+Much\+Grass} (const Mat grass)
+\item 
+int \hyperlink{video-player_8cpp_ae51308a281a1e8f6a879b4ff926df8cc}{get\+Next\+Matrix} (Mat \&M)
+\item 
+void \hyperlink{video-player_8cpp_afa34257303624cc2e2f9e6b70d3afffc}{th\+Between} (const Mat src, Mat \&dst, int min, int max)
+\item 
+void \hyperlink{video-player_8cpp_ac6245a17f42345fb5aa5a31b79fa3018}{th\+And} (const Mat src1, const Mat src2, Mat \&dst)
+\item 
+void \hyperlink{video-player_8cpp_add22166c90cbb599c9d4ed5bb260e43a}{contour\+Blob} (Mat src, Mat originale)
+\item 
+int \hyperlink{video-player_8cpp_ac89fd49fa60c43491222d0a4f4e0770b}{zone\+Color} (const Mat grass, Mat \&current, int color\+\_\+pixel, int x, int y)
+\item 
+int \hyperlink{video-player_8cpp_a830b96aaafe70cecf099c535278f5e15}{orientation} (\hyperlink{structcPoint}{c\+Point} p, \hyperlink{structcPoint}{c\+Point} q, \hyperlink{structcPoint}{c\+Point} r)
+\item 
+void \hyperlink{video-player_8cpp_a33efba2a6b739b7454779110219f0076}{jarvis\+Slave} (\hyperlink{structcPoint}{c\+Point} points\mbox{[}$\,$\mbox{]}, int n, const Mat grass)
+\item 
+void \hyperlink{video-player_8cpp_a6a56ec37b1d523d611f7533a78dbe25e}{jarvis} (const Mat grass, int size)
+\item 
+void \hyperlink{video-player_8cpp_a7d360f08236891102b0383d30831c3d7}{grass\+Processing} (const Mat grass, Mat \&dst)
+\item 
+void \hyperlink{video-player_8cpp_a25ff1eec5d5c041057fd097232df5dc8}{progress\+Bar} ()
+\item 
+void \hyperlink{video-player_8cpp_ac24faa0dbaa01a285ac62f3683a5e0b1}{process} (String benchmark)
+\item 
+void \hyperlink{video-player_8cpp_a6d8fa02fe70636ca21ee1ffef9de4880}{usage} (const char $\ast$s)
+\item 
+int \hyperlink{video-player_8cpp_a0ddf1224851353fc92bfbff6f499fa97}{main} (int argc, char $\ast$argv\mbox{[}$\,$\mbox{]})
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+float \hyperlink{video-player_8cpp_ac7abb4766cd3f65c31f56279d7decff8}{progress} = 0.\+0
+\item 
+vector$<$ Mat $>$ \hyperlink{video-player_8cpp_abd83dabb4c2838022aa129dfa446286b}{images}
+\item 
+unsigned int \hyperlink{video-player_8cpp_a8a06f17ddfffacbf634fed81c6d18e43}{image\+\_\+counter}
+\item 
+int \hyperlink{video-player_8cpp_a26f1a936d933f85e70ff48ce26f2bdf1}{bordure} = 5
+\end{DoxyCompactItemize}
+
+
+\subsection{Documentation des fonctions}
+\mbox{\Hypertarget{video-player_8cpp_add22166c90cbb599c9d4ed5bb260e43a}\label{video-player_8cpp_add22166c90cbb599c9d4ed5bb260e43a}} 
+\index{video-\/player.\+cpp@{video-\/player.\+cpp}!contour\+Blob@{contour\+Blob}}
+\index{contour\+Blob@{contour\+Blob}!video-\/player.\+cpp@{video-\/player.\+cpp}}
+\subsubsection{\texorpdfstring{contour\+Blob()}{contourBlob()}}
+{\footnotesize\ttfamily void contour\+Blob (\begin{DoxyParamCaption}\item[{Mat}]{src,  }\item[{Mat}]{originale }\end{DoxyParamCaption})}
+
+Description 
+\begin{DoxyParams}{Paramètres}
+{\em src} & \\
+\hline
+{\em originale} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{video-player_8cpp_ab27159545e19dba751b0be11450164be}\label{video-player_8cpp_ab27159545e19dba751b0be11450164be}} 
+\index{video-\/player.\+cpp@{video-\/player.\+cpp}!contours\+Terrain@{contours\+Terrain}}
+\index{contours\+Terrain@{contours\+Terrain}!video-\/player.\+cpp@{video-\/player.\+cpp}}
+\subsubsection{\texorpdfstring{contours\+Terrain()}{contoursTerrain()}}
+{\footnotesize\ttfamily void contours\+Terrain (\begin{DoxyParamCaption}\item[{const Mat}]{src,  }\item[{Mat \&}]{dst }\end{DoxyParamCaption})}
+
+Description 
+\begin{DoxyParams}{Paramètres}
+{\em src} & \\
+\hline
+{\em dst} & \\
+\hline
+\end{DoxyParams}
+Draw contours + hull results
+
+Draw contours \mbox{\Hypertarget{video-player_8cpp_a5c9426cb28038e89622652e1698e9ea2}\label{video-player_8cpp_a5c9426cb28038e89622652e1698e9ea2}} 
+\index{video-\/player.\+cpp@{video-\/player.\+cpp}!detection\+Couleur@{detection\+Couleur}}
+\index{detection\+Couleur@{detection\+Couleur}!video-\/player.\+cpp@{video-\/player.\+cpp}}
+\subsubsection{\texorpdfstring{detection\+Couleur()}{detectionCouleur()}}
+{\footnotesize\ttfamily void detection\+Couleur (\begin{DoxyParamCaption}\item[{const Mat}]{im,  }\item[{Mat \&}]{dst }\end{DoxyParamCaption})}
+
+Description 
+\begin{DoxyParams}{Paramètres}
+{\em im} & \\
+\hline
+{\em dst} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{video-player_8cpp_ae51308a281a1e8f6a879b4ff926df8cc}\label{video-player_8cpp_ae51308a281a1e8f6a879b4ff926df8cc}} 
+\index{video-\/player.\+cpp@{video-\/player.\+cpp}!get\+Next\+Matrix@{get\+Next\+Matrix}}
+\index{get\+Next\+Matrix@{get\+Next\+Matrix}!video-\/player.\+cpp@{video-\/player.\+cpp}}
+\subsubsection{\texorpdfstring{get\+Next\+Matrix()}{getNextMatrix()}}
+{\footnotesize\ttfamily int get\+Next\+Matrix (\begin{DoxyParamCaption}\item[{Mat \&}]{M }\end{DoxyParamCaption})}
+
+Descrpition 
+\begin{DoxyParams}{Paramètres}
+{\em M} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+
+\end{DoxyReturn}
+\mbox{\Hypertarget{video-player_8cpp_aed04ba0c6cd8101c6a0fbfbb01f7f212}\label{video-player_8cpp_aed04ba0c6cd8101c6a0fbfbb01f7f212}} 
+\index{video-\/player.\+cpp@{video-\/player.\+cpp}!get\+Pixel\+Matrix@{get\+Pixel\+Matrix}}
+\index{get\+Pixel\+Matrix@{get\+Pixel\+Matrix}!video-\/player.\+cpp@{video-\/player.\+cpp}}
+\subsubsection{\texorpdfstring{get\+Pixel\+Matrix()}{getPixelMatrix()}}
+{\footnotesize\ttfamily Mat get\+Pixel\+Matrix (\begin{DoxyParamCaption}\item[{Mat}]{image,  }\item[{int}]{cols,  }\item[{int}]{rows,  }\item[{int}]{radius }\end{DoxyParamCaption})}
+
+Description 
+\begin{DoxyParams}{Paramètres}
+{\em image} & \\
+\hline
+{\em cols} & \\
+\hline
+{\em rows} & \\
+\hline
+{\em radius} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+
+\end{DoxyReturn}
+\mbox{\Hypertarget{video-player_8cpp_a7d360f08236891102b0383d30831c3d7}\label{video-player_8cpp_a7d360f08236891102b0383d30831c3d7}} 
+\index{video-\/player.\+cpp@{video-\/player.\+cpp}!grass\+Processing@{grass\+Processing}}
+\index{grass\+Processing@{grass\+Processing}!video-\/player.\+cpp@{video-\/player.\+cpp}}
+\subsubsection{\texorpdfstring{grass\+Processing()}{grassProcessing()}}
+{\footnotesize\ttfamily void grass\+Processing (\begin{DoxyParamCaption}\item[{const Mat}]{grass,  }\item[{Mat \&}]{dst }\end{DoxyParamCaption})}
+
+Description 
+\begin{DoxyParams}{Paramètres}
+{\em grass} & \\
+\hline
+{\em dst} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{video-player_8cpp_a7d45bd8cb5867588c53db90cd9f2a384}\label{video-player_8cpp_a7d45bd8cb5867588c53db90cd9f2a384}} 
+\index{video-\/player.\+cpp@{video-\/player.\+cpp}!has\+Value@{has\+Value}}
+\index{has\+Value@{has\+Value}!video-\/player.\+cpp@{video-\/player.\+cpp}}
+\subsubsection{\texorpdfstring{has\+Value()}{hasValue()}}
+{\footnotesize\ttfamily int has\+Value (\begin{DoxyParamCaption}\item[{Mat}]{image }\end{DoxyParamCaption})}
+
+Description 
+\begin{DoxyParams}{Paramètres}
+{\em image} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+
+\end{DoxyReturn}
+\mbox{\Hypertarget{video-player_8cpp_af2babdeaf66dfac24e508efa01c230a0}\label{video-player_8cpp_af2babdeaf66dfac24e508efa01c230a0}} 
+\index{video-\/player.\+cpp@{video-\/player.\+cpp}!init@{init}}
+\index{init@{init}!video-\/player.\+cpp@{video-\/player.\+cpp}}
+\subsubsection{\texorpdfstring{init()}{init()}}
+{\footnotesize\ttfamily void init (\begin{DoxyParamCaption}\item[{String}]{folder }\end{DoxyParamCaption})}
+
+Description 
+\begin{DoxyParams}{Paramètres}
+{\em folder} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{video-player_8cpp_a6a56ec37b1d523d611f7533a78dbe25e}\label{video-player_8cpp_a6a56ec37b1d523d611f7533a78dbe25e}} 
+\index{video-\/player.\+cpp@{video-\/player.\+cpp}!jarvis@{jarvis}}
+\index{jarvis@{jarvis}!video-\/player.\+cpp@{video-\/player.\+cpp}}
+\subsubsection{\texorpdfstring{jarvis()}{jarvis()}}
+{\footnotesize\ttfamily void jarvis (\begin{DoxyParamCaption}\item[{const Mat}]{grass,  }\item[{int}]{size }\end{DoxyParamCaption})}
+
+Description 
+\begin{DoxyParams}{Paramètres}
+{\em grass} & \\
+\hline
+{\em size} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{video-player_8cpp_a33efba2a6b739b7454779110219f0076}\label{video-player_8cpp_a33efba2a6b739b7454779110219f0076}} 
+\index{video-\/player.\+cpp@{video-\/player.\+cpp}!jarvis\+Slave@{jarvis\+Slave}}
+\index{jarvis\+Slave@{jarvis\+Slave}!video-\/player.\+cpp@{video-\/player.\+cpp}}
+\subsubsection{\texorpdfstring{jarvis\+Slave()}{jarvisSlave()}}
+{\footnotesize\ttfamily void jarvis\+Slave (\begin{DoxyParamCaption}\item[{\hyperlink{structcPoint}{c\+Point}}]{points\mbox{[}$\,$\mbox{]},  }\item[{int}]{n,  }\item[{const Mat}]{grass }\end{DoxyParamCaption})}
+
+Description 
+\begin{DoxyParams}{Paramètres}
+{\em points} & \\
+\hline
+{\em n} & \\
+\hline
+{\em grass} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{video-player_8cpp_a0ddf1224851353fc92bfbff6f499fa97}\label{video-player_8cpp_a0ddf1224851353fc92bfbff6f499fa97}} 
+\index{video-\/player.\+cpp@{video-\/player.\+cpp}!main@{main}}
+\index{main@{main}!video-\/player.\+cpp@{video-\/player.\+cpp}}
+\subsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$}]{argv\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+Fonction principale du programme \mbox{\Hypertarget{video-player_8cpp_a830b96aaafe70cecf099c535278f5e15}\label{video-player_8cpp_a830b96aaafe70cecf099c535278f5e15}} 
+\index{video-\/player.\+cpp@{video-\/player.\+cpp}!orientation@{orientation}}
+\index{orientation@{orientation}!video-\/player.\+cpp@{video-\/player.\+cpp}}
+\subsubsection{\texorpdfstring{orientation()}{orientation()}}
+{\footnotesize\ttfamily int orientation (\begin{DoxyParamCaption}\item[{\hyperlink{structcPoint}{c\+Point}}]{p,  }\item[{\hyperlink{structcPoint}{c\+Point}}]{q,  }\item[{\hyperlink{structcPoint}{c\+Point}}]{r }\end{DoxyParamCaption})}
+
+Description 
+\begin{DoxyParams}{Paramètres}
+{\em c} & \\
+\hline
+{\em q} & \\
+\hline
+{\em r} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+
+\end{DoxyReturn}
+\mbox{\Hypertarget{video-player_8cpp_a9f80ae7e85756c477e38dea2fecc278d}\label{video-player_8cpp_a9f80ae7e85756c477e38dea2fecc278d}} 
+\index{video-\/player.\+cpp@{video-\/player.\+cpp}!patch\+All3@{patch\+All3}}
+\index{patch\+All3@{patch\+All3}!video-\/player.\+cpp@{video-\/player.\+cpp}}
+\subsubsection{\texorpdfstring{patch\+All3()}{patchAll3()}}
+{\footnotesize\ttfamily void patch\+All3 (\begin{DoxyParamCaption}\item[{const Mat}]{src1,  }\item[{const Mat}]{src2,  }\item[{const Mat}]{src3,  }\item[{Mat \&}]{dst }\end{DoxyParamCaption})}
+
+Description 
+\begin{DoxyParams}{Paramètres}
+{\em src1} & \\
+\hline
+{\em src2} & \\
+\hline
+{\em src3} & \\
+\hline
+{\em dst} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{video-player_8cpp_ac24faa0dbaa01a285ac62f3683a5e0b1}\label{video-player_8cpp_ac24faa0dbaa01a285ac62f3683a5e0b1}} 
+\index{video-\/player.\+cpp@{video-\/player.\+cpp}!process@{process}}
+\index{process@{process}!video-\/player.\+cpp@{video-\/player.\+cpp}}
+\subsubsection{\texorpdfstring{process()}{process()}}
+{\footnotesize\ttfamily void process (\begin{DoxyParamCaption}\item[{String}]{benchmark }\end{DoxyParamCaption})}
+
+Descrption 
+\begin{DoxyParams}{Paramètres}
+{\em benchmark} & \\
+\hline
+\end{DoxyParams}
+find posts
+
+find grass \mbox{\Hypertarget{video-player_8cpp_a25ff1eec5d5c041057fd097232df5dc8}\label{video-player_8cpp_a25ff1eec5d5c041057fd097232df5dc8}} 
+\index{video-\/player.\+cpp@{video-\/player.\+cpp}!progress\+Bar@{progress\+Bar}}
+\index{progress\+Bar@{progress\+Bar}!video-\/player.\+cpp@{video-\/player.\+cpp}}
+\subsubsection{\texorpdfstring{progress\+Bar()}{progressBar()}}
+{\footnotesize\ttfamily void progress\+Bar (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Description \mbox{\Hypertarget{video-player_8cpp_a2bb3a617236eb1bd8ace5e140f519081}\label{video-player_8cpp_a2bb3a617236eb1bd8ace5e140f519081}} 
+\index{video-\/player.\+cpp@{video-\/player.\+cpp}!rng@{rng}}
+\index{rng@{rng}!video-\/player.\+cpp@{video-\/player.\+cpp}}
+\subsubsection{\texorpdfstring{rng()}{rng()}}
+{\footnotesize\ttfamily R\+NG rng (\begin{DoxyParamCaption}\item[{12345}]{ }\end{DoxyParamCaption})}
+
+Cette variable sera utilisé pour générer aléatoirement des coleurs \mbox{\Hypertarget{video-player_8cpp_ac6245a17f42345fb5aa5a31b79fa3018}\label{video-player_8cpp_ac6245a17f42345fb5aa5a31b79fa3018}} 
+\index{video-\/player.\+cpp@{video-\/player.\+cpp}!th\+And@{th\+And}}
+\index{th\+And@{th\+And}!video-\/player.\+cpp@{video-\/player.\+cpp}}
+\subsubsection{\texorpdfstring{th\+And()}{thAnd()}}
+{\footnotesize\ttfamily void th\+And (\begin{DoxyParamCaption}\item[{const Mat}]{src1,  }\item[{const Mat}]{src2,  }\item[{Mat \&}]{dst }\end{DoxyParamCaption})}
+
+Description 
+\begin{DoxyParams}{Paramètres}
+{\em src1} & \\
+\hline
+{\em src2} & \\
+\hline
+{\em dst} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{video-player_8cpp_afa34257303624cc2e2f9e6b70d3afffc}\label{video-player_8cpp_afa34257303624cc2e2f9e6b70d3afffc}} 
+\index{video-\/player.\+cpp@{video-\/player.\+cpp}!th\+Between@{th\+Between}}
+\index{th\+Between@{th\+Between}!video-\/player.\+cpp@{video-\/player.\+cpp}}
+\subsubsection{\texorpdfstring{th\+Between()}{thBetween()}}
+{\footnotesize\ttfamily void th\+Between (\begin{DoxyParamCaption}\item[{const Mat}]{src,  }\item[{Mat \&}]{dst,  }\item[{int}]{min,  }\item[{int}]{max }\end{DoxyParamCaption})}
+
+Description 
+\begin{DoxyParams}{Paramètres}
+{\em src} & \\
+\hline
+{\em dst} & \\
+\hline
+{\em min} & \\
+\hline
+{\em max} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{video-player_8cpp_ae6327342609d01a59423d2f231d83921}\label{video-player_8cpp_ae6327342609d01a59423d2f231d83921}} 
+\index{video-\/player.\+cpp@{video-\/player.\+cpp}!too\+Much\+Grass@{too\+Much\+Grass}}
+\index{too\+Much\+Grass@{too\+Much\+Grass}!video-\/player.\+cpp@{video-\/player.\+cpp}}
+\subsubsection{\texorpdfstring{too\+Much\+Grass()}{tooMuchGrass()}}
+{\footnotesize\ttfamily bool too\+Much\+Grass (\begin{DoxyParamCaption}\item[{const Mat}]{grass }\end{DoxyParamCaption})}
+
+Description 
+\begin{DoxyParams}{Paramètres}
+{\em grass} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+
+\end{DoxyReturn}
+\mbox{\Hypertarget{video-player_8cpp_a6d8fa02fe70636ca21ee1ffef9de4880}\label{video-player_8cpp_a6d8fa02fe70636ca21ee1ffef9de4880}} 
+\index{video-\/player.\+cpp@{video-\/player.\+cpp}!usage@{usage}}
+\index{usage@{usage}!video-\/player.\+cpp@{video-\/player.\+cpp}}
+\subsubsection{\texorpdfstring{usage()}{usage()}}
+{\footnotesize\ttfamily void usage (\begin{DoxyParamCaption}\item[{const char $\ast$}]{s }\end{DoxyParamCaption})}
+
+Fonction qui sera appelé lorsque le nombre de paramètres utilisé pour appelé le programme est incorrecte 
+\begin{DoxyParams}{Paramètres}
+{\em s} & Le nom du programme \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{video-player_8cpp_ac89fd49fa60c43491222d0a4f4e0770b}\label{video-player_8cpp_ac89fd49fa60c43491222d0a4f4e0770b}} 
+\index{video-\/player.\+cpp@{video-\/player.\+cpp}!zone\+Color@{zone\+Color}}
+\index{zone\+Color@{zone\+Color}!video-\/player.\+cpp@{video-\/player.\+cpp}}
+\subsubsection{\texorpdfstring{zone\+Color()}{zoneColor()}}
+{\footnotesize\ttfamily int zone\+Color (\begin{DoxyParamCaption}\item[{const Mat}]{grass,  }\item[{Mat \&}]{current,  }\item[{int}]{color\+\_\+pixel,  }\item[{int}]{x,  }\item[{int}]{y }\end{DoxyParamCaption})}
+
+Description 
+\begin{DoxyParams}{Paramètres}
+{\em grass} & \\
+\hline
+{\em current} & \\
+\hline
+{\em color\+\_\+pixel} & \\
+\hline
+{\em x} & \\
+\hline
+{\em y} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+
+\end{DoxyReturn}
+
+
+\subsection{Documentation des variables}
+\mbox{\Hypertarget{video-player_8cpp_a26f1a936d933f85e70ff48ce26f2bdf1}\label{video-player_8cpp_a26f1a936d933f85e70ff48ce26f2bdf1}} 
+\index{video-\/player.\+cpp@{video-\/player.\+cpp}!bordure@{bordure}}
+\index{bordure@{bordure}!video-\/player.\+cpp@{video-\/player.\+cpp}}
+\subsubsection{\texorpdfstring{bordure}{bordure}}
+{\footnotesize\ttfamily int bordure = 5}
+
+Nombre depixel rajouté en bordure de l\textquotesingle{}image \mbox{\Hypertarget{video-player_8cpp_a8a06f17ddfffacbf634fed81c6d18e43}\label{video-player_8cpp_a8a06f17ddfffacbf634fed81c6d18e43}} 
+\index{video-\/player.\+cpp@{video-\/player.\+cpp}!image\+\_\+counter@{image\+\_\+counter}}
+\index{image\+\_\+counter@{image\+\_\+counter}!video-\/player.\+cpp@{video-\/player.\+cpp}}
+\subsubsection{\texorpdfstring{image\+\_\+counter}{image\_counter}}
+{\footnotesize\ttfamily unsigned int image\+\_\+counter}
+
+Entier qui va compter le nombre d\textquotesingle{}image traité \mbox{\Hypertarget{video-player_8cpp_abd83dabb4c2838022aa129dfa446286b}\label{video-player_8cpp_abd83dabb4c2838022aa129dfa446286b}} 
+\index{video-\/player.\+cpp@{video-\/player.\+cpp}!images@{images}}
+\index{images@{images}!video-\/player.\+cpp@{video-\/player.\+cpp}}
+\subsubsection{\texorpdfstring{images}{images}}
+{\footnotesize\ttfamily vector$<$Mat$>$ images}
+
+Vecteur contenant l\textquotesingle{}ensemble des images du dossier passé en paramètre \mbox{\Hypertarget{video-player_8cpp_ac7abb4766cd3f65c31f56279d7decff8}\label{video-player_8cpp_ac7abb4766cd3f65c31f56279d7decff8}} 
+\index{video-\/player.\+cpp@{video-\/player.\+cpp}!progress@{progress}}
+\index{progress@{progress}!video-\/player.\+cpp@{video-\/player.\+cpp}}
+\subsubsection{\texorpdfstring{progress}{progress}}
+{\footnotesize\ttfamily float progress = 0.\+0}
+
+Variable utilisé pour la barre de progression 

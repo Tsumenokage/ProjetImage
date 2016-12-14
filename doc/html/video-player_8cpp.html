@@ -1,0 +1,941 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.13"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Traitement d&#39;image : Détection des buts: Référence du fichier video-player.cpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Traitement d&#39;image : Détection des buts
+   </div>
+   <div id="projectbrief">L&#39;objectif de ce projet est de détecter la base des butes lors du tournoi de football robotique : La Robocup</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Généré par Doxygen 1.8.13 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'Recherche');
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Recherche');
+  $(document).ready(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#define-members">Macros</a> &#124;
+<a href="#func-members">Fonctions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
+  <div class="headertitle">
+<div class="title">Référence du fichier video-player.cpp</div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &lt;iostream&gt;</code><br />
+<code>#include &lt;cstdlib&gt;</code><br />
+<code>#include &lt;cstdio&gt;</code><br />
+<code>#include &lt;dirent.h&gt;</code><br />
+<code>#include &lt;opencv2/opencv.hpp&gt;</code><br />
+<code>#include &lt;fstream&gt;</code><br />
+<code>#include &lt;ctime&gt;</code><br />
+<code>#include &lt;list&gt;</code><br />
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcPoint.html">cPoint</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:acff701cfc8fab0de8704435ba1462970"><td class="memItemLeft" align="right" valign="top"><a id="acff701cfc8fab0de8704435ba1462970"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>param</b>&#160;&#160;&#160;2</td></tr>
+<tr class="separator:acff701cfc8fab0de8704435ba1462970"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Fonctions</h2></td></tr>
+<tr class="memitem:a2bb3a617236eb1bd8ace5e140f519081"><td class="memItemLeft" align="right" valign="top">RNG&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="video-player_8cpp.html#a2bb3a617236eb1bd8ace5e140f519081">rng</a> (12345)</td></tr>
+<tr class="separator:a2bb3a617236eb1bd8ace5e140f519081"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d45bd8cb5867588c53db90cd9f2a384"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="video-player_8cpp.html#a7d45bd8cb5867588c53db90cd9f2a384">hasValue</a> (Mat image)</td></tr>
+<tr class="separator:a7d45bd8cb5867588c53db90cd9f2a384"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed04ba0c6cd8101c6a0fbfbb01f7f212"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="video-player_8cpp.html#aed04ba0c6cd8101c6a0fbfbb01f7f212">getPixelMatrix</a> (Mat image, int cols, int rows, int radius)</td></tr>
+<tr class="separator:aed04ba0c6cd8101c6a0fbfbb01f7f212"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f80ae7e85756c477e38dea2fecc278d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="video-player_8cpp.html#a9f80ae7e85756c477e38dea2fecc278d">patchAll3</a> (const Mat src1, const Mat src2, const Mat src3, Mat &amp;dst)</td></tr>
+<tr class="separator:a9f80ae7e85756c477e38dea2fecc278d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab27159545e19dba751b0be11450164be"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="video-player_8cpp.html#ab27159545e19dba751b0be11450164be">contoursTerrain</a> (const Mat src, Mat &amp;dst)</td></tr>
+<tr class="separator:ab27159545e19dba751b0be11450164be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c9426cb28038e89622652e1698e9ea2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="video-player_8cpp.html#a5c9426cb28038e89622652e1698e9ea2">detectionCouleur</a> (const Mat im, Mat &amp;dst)</td></tr>
+<tr class="separator:a5c9426cb28038e89622652e1698e9ea2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2babdeaf66dfac24e508efa01c230a0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="video-player_8cpp.html#af2babdeaf66dfac24e508efa01c230a0">init</a> (String folder)</td></tr>
+<tr class="separator:af2babdeaf66dfac24e508efa01c230a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6327342609d01a59423d2f231d83921"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="video-player_8cpp.html#ae6327342609d01a59423d2f231d83921">tooMuchGrass</a> (const Mat grass)</td></tr>
+<tr class="separator:ae6327342609d01a59423d2f231d83921"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae51308a281a1e8f6a879b4ff926df8cc"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="video-player_8cpp.html#ae51308a281a1e8f6a879b4ff926df8cc">getNextMatrix</a> (Mat &amp;M)</td></tr>
+<tr class="separator:ae51308a281a1e8f6a879b4ff926df8cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa34257303624cc2e2f9e6b70d3afffc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="video-player_8cpp.html#afa34257303624cc2e2f9e6b70d3afffc">thBetween</a> (const Mat src, Mat &amp;dst, int min, int max)</td></tr>
+<tr class="separator:afa34257303624cc2e2f9e6b70d3afffc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6245a17f42345fb5aa5a31b79fa3018"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="video-player_8cpp.html#ac6245a17f42345fb5aa5a31b79fa3018">thAnd</a> (const Mat src1, const Mat src2, Mat &amp;dst)</td></tr>
+<tr class="separator:ac6245a17f42345fb5aa5a31b79fa3018"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add22166c90cbb599c9d4ed5bb260e43a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="video-player_8cpp.html#add22166c90cbb599c9d4ed5bb260e43a">contourBlob</a> (Mat src, Mat originale)</td></tr>
+<tr class="separator:add22166c90cbb599c9d4ed5bb260e43a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac89fd49fa60c43491222d0a4f4e0770b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="video-player_8cpp.html#ac89fd49fa60c43491222d0a4f4e0770b">zoneColor</a> (const Mat grass, Mat &amp;current, int color_pixel, int x, int y)</td></tr>
+<tr class="separator:ac89fd49fa60c43491222d0a4f4e0770b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a830b96aaafe70cecf099c535278f5e15"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="video-player_8cpp.html#a830b96aaafe70cecf099c535278f5e15">orientation</a> (<a class="el" href="structcPoint.html">cPoint</a> p, <a class="el" href="structcPoint.html">cPoint</a> q, <a class="el" href="structcPoint.html">cPoint</a> r)</td></tr>
+<tr class="separator:a830b96aaafe70cecf099c535278f5e15"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33efba2a6b739b7454779110219f0076"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="video-player_8cpp.html#a33efba2a6b739b7454779110219f0076">jarvisSlave</a> (<a class="el" href="structcPoint.html">cPoint</a> points[], int n, const Mat grass)</td></tr>
+<tr class="separator:a33efba2a6b739b7454779110219f0076"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a56ec37b1d523d611f7533a78dbe25e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="video-player_8cpp.html#a6a56ec37b1d523d611f7533a78dbe25e">jarvis</a> (const Mat grass, int size)</td></tr>
+<tr class="separator:a6a56ec37b1d523d611f7533a78dbe25e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d360f08236891102b0383d30831c3d7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="video-player_8cpp.html#a7d360f08236891102b0383d30831c3d7">grassProcessing</a> (const Mat grass, Mat &amp;dst)</td></tr>
+<tr class="separator:a7d360f08236891102b0383d30831c3d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25ff1eec5d5c041057fd097232df5dc8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="video-player_8cpp.html#a25ff1eec5d5c041057fd097232df5dc8">progressBar</a> ()</td></tr>
+<tr class="separator:a25ff1eec5d5c041057fd097232df5dc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac24faa0dbaa01a285ac62f3683a5e0b1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="video-player_8cpp.html#ac24faa0dbaa01a285ac62f3683a5e0b1">process</a> (String benchmark)</td></tr>
+<tr class="separator:ac24faa0dbaa01a285ac62f3683a5e0b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d8fa02fe70636ca21ee1ffef9de4880"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="video-player_8cpp.html#a6d8fa02fe70636ca21ee1ffef9de4880">usage</a> (const char *s)</td></tr>
+<tr class="separator:a6d8fa02fe70636ca21ee1ffef9de4880"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ddf1224851353fc92bfbff6f499fa97"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="video-player_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">main</a> (int argc, char *argv[])</td></tr>
+<tr class="separator:a0ddf1224851353fc92bfbff6f499fa97"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:ac7abb4766cd3f65c31f56279d7decff8"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="video-player_8cpp.html#ac7abb4766cd3f65c31f56279d7decff8">progress</a> = 0.0</td></tr>
+<tr class="separator:ac7abb4766cd3f65c31f56279d7decff8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd83dabb4c2838022aa129dfa446286b"><td class="memItemLeft" align="right" valign="top">vector&lt; Mat &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="video-player_8cpp.html#abd83dabb4c2838022aa129dfa446286b">images</a></td></tr>
+<tr class="separator:abd83dabb4c2838022aa129dfa446286b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a06f17ddfffacbf634fed81c6d18e43"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="video-player_8cpp.html#a8a06f17ddfffacbf634fed81c6d18e43">image_counter</a></td></tr>
+<tr class="separator:a8a06f17ddfffacbf634fed81c6d18e43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26f1a936d933f85e70ff48ce26f2bdf1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="video-player_8cpp.html#a26f1a936d933f85e70ff48ce26f2bdf1">bordure</a> = 5</td></tr>
+<tr class="separator:a26f1a936d933f85e70ff48ce26f2bdf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Documentation des fonctions</h2>
+<a id="add22166c90cbb599c9d4ed5bb260e43a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add22166c90cbb599c9d4ed5bb260e43a">&#9670;&nbsp;</a></span>contourBlob()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void contourBlob </td>
+          <td>(</td>
+          <td class="paramtype">Mat&#160;</td>
+          <td class="paramname"><em>src</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Mat&#160;</td>
+          <td class="paramname"><em>originale</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Description </p><dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">src</td><td></td></tr>
+    <tr><td class="paramname">originale</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ab27159545e19dba751b0be11450164be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab27159545e19dba751b0be11450164be">&#9670;&nbsp;</a></span>contoursTerrain()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void contoursTerrain </td>
+          <td>(</td>
+          <td class="paramtype">const Mat&#160;</td>
+          <td class="paramname"><em>src</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Mat &amp;&#160;</td>
+          <td class="paramname"><em>dst</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Description </p><dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">src</td><td></td></tr>
+    <tr><td class="paramname">dst</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Draw contours + hull results</p>
+<p>Draw contours </p>
+
+</div>
+</div>
+<a id="a5c9426cb28038e89622652e1698e9ea2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c9426cb28038e89622652e1698e9ea2">&#9670;&nbsp;</a></span>detectionCouleur()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void detectionCouleur </td>
+          <td>(</td>
+          <td class="paramtype">const Mat&#160;</td>
+          <td class="paramname"><em>im</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Mat &amp;&#160;</td>
+          <td class="paramname"><em>dst</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Description </p><dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">im</td><td></td></tr>
+    <tr><td class="paramname">dst</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ae51308a281a1e8f6a879b4ff926df8cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae51308a281a1e8f6a879b4ff926df8cc">&#9670;&nbsp;</a></span>getNextMatrix()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int getNextMatrix </td>
+          <td>(</td>
+          <td class="paramtype">Mat &amp;&#160;</td>
+          <td class="paramname"><em>M</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Descrpition </p><dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">M</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Renvoie</dt><dd></dd></dl>
+
+</div>
+</div>
+<a id="aed04ba0c6cd8101c6a0fbfbb01f7f212"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed04ba0c6cd8101c6a0fbfbb01f7f212">&#9670;&nbsp;</a></span>getPixelMatrix()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Mat getPixelMatrix </td>
+          <td>(</td>
+          <td class="paramtype">Mat&#160;</td>
+          <td class="paramname"><em>image</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>cols</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>rows</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>radius</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Description </p><dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">image</td><td></td></tr>
+    <tr><td class="paramname">cols</td><td></td></tr>
+    <tr><td class="paramname">rows</td><td></td></tr>
+    <tr><td class="paramname">radius</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Renvoie</dt><dd></dd></dl>
+
+</div>
+</div>
+<a id="a7d360f08236891102b0383d30831c3d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d360f08236891102b0383d30831c3d7">&#9670;&nbsp;</a></span>grassProcessing()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void grassProcessing </td>
+          <td>(</td>
+          <td class="paramtype">const Mat&#160;</td>
+          <td class="paramname"><em>grass</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Mat &amp;&#160;</td>
+          <td class="paramname"><em>dst</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Description </p><dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">grass</td><td></td></tr>
+    <tr><td class="paramname">dst</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a7d45bd8cb5867588c53db90cd9f2a384"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d45bd8cb5867588c53db90cd9f2a384">&#9670;&nbsp;</a></span>hasValue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int hasValue </td>
+          <td>(</td>
+          <td class="paramtype">Mat&#160;</td>
+          <td class="paramname"><em>image</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Description </p><dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">image</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Renvoie</dt><dd></dd></dl>
+
+</div>
+</div>
+<a id="af2babdeaf66dfac24e508efa01c230a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af2babdeaf66dfac24e508efa01c230a0">&#9670;&nbsp;</a></span>init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void init </td>
+          <td>(</td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>folder</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Description </p><dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">folder</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a6a56ec37b1d523d611f7533a78dbe25e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a56ec37b1d523d611f7533a78dbe25e">&#9670;&nbsp;</a></span>jarvis()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void jarvis </td>
+          <td>(</td>
+          <td class="paramtype">const Mat&#160;</td>
+          <td class="paramname"><em>grass</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Description </p><dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">grass</td><td></td></tr>
+    <tr><td class="paramname">size</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a33efba2a6b739b7454779110219f0076"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a33efba2a6b739b7454779110219f0076">&#9670;&nbsp;</a></span>jarvisSlave()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void jarvisSlave </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcPoint.html">cPoint</a>&#160;</td>
+          <td class="paramname"><em>points</em>[], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Mat&#160;</td>
+          <td class="paramname"><em>grass</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Description </p><dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">points</td><td></td></tr>
+    <tr><td class="paramname">n</td><td></td></tr>
+    <tr><td class="paramname">grass</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a0ddf1224851353fc92bfbff6f499fa97"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ddf1224851353fc92bfbff6f499fa97">&#9670;&nbsp;</a></span>main()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int main </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>argc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>argv</em>[]&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Fonction principale du programme </p>
+
+</div>
+</div>
+<a id="a830b96aaafe70cecf099c535278f5e15"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a830b96aaafe70cecf099c535278f5e15">&#9670;&nbsp;</a></span>orientation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int orientation </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcPoint.html">cPoint</a>&#160;</td>
+          <td class="paramname"><em>p</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structcPoint.html">cPoint</a>&#160;</td>
+          <td class="paramname"><em>q</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structcPoint.html">cPoint</a>&#160;</td>
+          <td class="paramname"><em>r</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Description </p><dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">c</td><td></td></tr>
+    <tr><td class="paramname">q</td><td></td></tr>
+    <tr><td class="paramname">r</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Renvoie</dt><dd></dd></dl>
+
+</div>
+</div>
+<a id="a9f80ae7e85756c477e38dea2fecc278d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f80ae7e85756c477e38dea2fecc278d">&#9670;&nbsp;</a></span>patchAll3()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void patchAll3 </td>
+          <td>(</td>
+          <td class="paramtype">const Mat&#160;</td>
+          <td class="paramname"><em>src1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Mat&#160;</td>
+          <td class="paramname"><em>src2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Mat&#160;</td>
+          <td class="paramname"><em>src3</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Mat &amp;&#160;</td>
+          <td class="paramname"><em>dst</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Description </p><dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">src1</td><td></td></tr>
+    <tr><td class="paramname">src2</td><td></td></tr>
+    <tr><td class="paramname">src3</td><td></td></tr>
+    <tr><td class="paramname">dst</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ac24faa0dbaa01a285ac62f3683a5e0b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac24faa0dbaa01a285ac62f3683a5e0b1">&#9670;&nbsp;</a></span>process()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void process </td>
+          <td>(</td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>benchmark</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Descrption </p><dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">benchmark</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<p>find posts</p>
+<p>find grass </p>
+
+</div>
+</div>
+<a id="a25ff1eec5d5c041057fd097232df5dc8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25ff1eec5d5c041057fd097232df5dc8">&#9670;&nbsp;</a></span>progressBar()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void progressBar </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Description </p>
+
+</div>
+</div>
+<a id="a2bb3a617236eb1bd8ace5e140f519081"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2bb3a617236eb1bd8ace5e140f519081">&#9670;&nbsp;</a></span>rng()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RNG rng </td>
+          <td>(</td>
+          <td class="paramtype">12345&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Cette variable sera utilisé pour générer aléatoirement des coleurs </p>
+
+</div>
+</div>
+<a id="ac6245a17f42345fb5aa5a31b79fa3018"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6245a17f42345fb5aa5a31b79fa3018">&#9670;&nbsp;</a></span>thAnd()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void thAnd </td>
+          <td>(</td>
+          <td class="paramtype">const Mat&#160;</td>
+          <td class="paramname"><em>src1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Mat&#160;</td>
+          <td class="paramname"><em>src2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Mat &amp;&#160;</td>
+          <td class="paramname"><em>dst</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Description </p><dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">src1</td><td></td></tr>
+    <tr><td class="paramname">src2</td><td></td></tr>
+    <tr><td class="paramname">dst</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="afa34257303624cc2e2f9e6b70d3afffc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa34257303624cc2e2f9e6b70d3afffc">&#9670;&nbsp;</a></span>thBetween()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void thBetween </td>
+          <td>(</td>
+          <td class="paramtype">const Mat&#160;</td>
+          <td class="paramname"><em>src</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Mat &amp;&#160;</td>
+          <td class="paramname"><em>dst</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>min</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>max</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Description </p><dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">src</td><td></td></tr>
+    <tr><td class="paramname">dst</td><td></td></tr>
+    <tr><td class="paramname">min</td><td></td></tr>
+    <tr><td class="paramname">max</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ae6327342609d01a59423d2f231d83921"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae6327342609d01a59423d2f231d83921">&#9670;&nbsp;</a></span>tooMuchGrass()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool tooMuchGrass </td>
+          <td>(</td>
+          <td class="paramtype">const Mat&#160;</td>
+          <td class="paramname"><em>grass</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Description </p><dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">grass</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Renvoie</dt><dd></dd></dl>
+
+</div>
+</div>
+<a id="a6d8fa02fe70636ca21ee1ffef9de4880"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d8fa02fe70636ca21ee1ffef9de4880">&#9670;&nbsp;</a></span>usage()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void usage </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>s</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Fonction qui sera appelé lorsque le nombre de paramètres utilisé pour appelé le programme est incorrecte </p><dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s</td><td>Le nom du programme </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ac89fd49fa60c43491222d0a4f4e0770b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac89fd49fa60c43491222d0a4f4e0770b">&#9670;&nbsp;</a></span>zoneColor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int zoneColor </td>
+          <td>(</td>
+          <td class="paramtype">const Mat&#160;</td>
+          <td class="paramname"><em>grass</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Mat &amp;&#160;</td>
+          <td class="paramname"><em>current</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>color_pixel</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Description </p><dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">grass</td><td></td></tr>
+    <tr><td class="paramname">current</td><td></td></tr>
+    <tr><td class="paramname">color_pixel</td><td></td></tr>
+    <tr><td class="paramname">x</td><td></td></tr>
+    <tr><td class="paramname">y</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Renvoie</dt><dd></dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">Documentation des variables</h2>
+<a id="a26f1a936d933f85e70ff48ce26f2bdf1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26f1a936d933f85e70ff48ce26f2bdf1">&#9670;&nbsp;</a></span>bordure</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int bordure = 5</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Nombre depixel rajouté en bordure de l'image </p>
+
+</div>
+</div>
+<a id="a8a06f17ddfffacbf634fed81c6d18e43"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8a06f17ddfffacbf634fed81c6d18e43">&#9670;&nbsp;</a></span>image_counter</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned int image_counter</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Entier qui va compter le nombre d'image traité </p>
+
+</div>
+</div>
+<a id="abd83dabb4c2838022aa129dfa446286b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd83dabb4c2838022aa129dfa446286b">&#9670;&nbsp;</a></span>images</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt;Mat&gt; images</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Vecteur contenant l'ensemble des images du dossier passé en paramètre </p>
+
+</div>
+</div>
+<a id="ac7abb4766cd3f65c31f56279d7decff8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7abb4766cd3f65c31f56279d7decff8">&#9670;&nbsp;</a></span>progress</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float progress = 0.0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Variable utilisé pour la barre de progression </p>
+
+</div>
+</div>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Généré par &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.13
+</small></address>
+</body>
+</html>
