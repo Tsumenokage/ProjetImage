@@ -104,8 +104,7 @@ void patchAll3(const Mat src1, const Mat src2, const Mat src3, Mat& dst, int tai
  * @param dst Image permettant d'afficher le contour du terrain
  * 
  * */
-void contoursTerrain(const Mat src, Mat &dst)
-{
+void contoursTerrain(const Mat src, Mat &dst) {
   int threshCanny = 100; //Seuil utilisé pour la detection des bords
   vector<vector<Point> > contours; //Matrice de Matrice de points qui contiendras les contours trouvé dans l'image
   Mat detectionTerrainCanny; //Image des bords détectés.
@@ -178,8 +177,7 @@ void contoursTerrain(const Mat src, Mat &dst)
  * @param dst Image binaire dont les zones blanches correspondront à l'herbe trouvé dans im
  * 
  * */
-void detectionGrass(const Mat im, Mat &dst)
-{
+void detectionGrass(const Mat im, Mat &dst) {
 	 Mat imgTh;
 	 Mat imHSV;
 	 //Définition des valeurs min et max de H,S et V pour détecter l'herbe
@@ -303,8 +301,7 @@ int getNextMatrix(Mat& M) {
 
  * 
  * */
-void contourBlob(Mat src, Mat originale)
-{
+void contourBlob(Mat src, Mat originale) {
 	vector<vector<Point> > contours;
 	vector<Vec4i> hierarchy;
 	
@@ -514,8 +511,7 @@ void grassProcessing(const Mat grass, Mat & dst)  {
 /**
  * Cette fonction va gérer l'affichage de la barre de progression
  * */
-void progressBar()
-{
+void progressBar() {
     int barWidth = 70;
 	
     std::cout << "[";
@@ -564,32 +560,40 @@ void process(String benchmark) {
       if (found == 0)
 	break;
 
-      
+      /************ Ajout d'une bordure de pixels noirs à l'image *****************************/
       copyMakeBorder(image,image,bordure,bordure,bordure,bordure,BORDER_CONSTANT,Scalar(0,0,0));
 
-      /************ show HSV channels *******************/
-      /** find posts **/
+      /************ Détection de composante couleur de l'image *******************/
+      
+      
+      /** Détection des poteaux des buts (zones blanches de l'image) **/
       Mat hsv,HS;
       cvtColor(image,hsv,CV_BGR2HSV);
       inRange(hsv, Scalar(20, 175, 0), Scalar(255, 255, 255), HS); //Threshold the image
       Mat elementB = getStructuringElement(MORPH_ELLIPSE, Size(4,4), Point(0, 0) );
       erode(HS,HS,elementB);
-      /** find grass **/
+      
+      /** Détection de l'herbe (zone verte de l'image **/
       Mat grass;
       detectionGrass(image,grass);
       medianBlur(grass,grass,7);
       
       //imshow("grass", grass);
+      /** Opération morphologique sur l'herbe afin d'obtenir une zone la plus lisse possible **/
       Mat element = getStructuringElement(MORPH_ELLIPSE, Size(10,10), Point(0, 0) );
       erode(grass,grass,element);
       erode(grass,grass,element);
       dilate(grass,grass,element);
       dilate(grass,grass,element);
 
-      /*** if too much grass on the corner , no posts ***/
+      /*** Si trops d'herbe autour, le robot regarde à ses pieds et donc peu de chance d'y voir un poteau ***/
       if ( !tooMuchGrass(grass)) {
+		  
+	  /********* Détection des contours du terrain ************/
       Mat countour;
       contoursTerrain(grass,countour);
+      
+      /******** On merge les trois composantes : Herbes, Poteaux (zone blanches) et contour du terraind ans une même image**/
       Mat input[3];
       input[0] = HS;
       input[1] = grass;
@@ -598,13 +602,17 @@ void process(String benchmark) {
       merge(input,3,output);
       if(!bench)
 		imshow("output",output);
-		
+      
+      /************On cherche les poteaux précisément grâce à la fonction patchAll3**************/
       Mat last;
       patchAll3(grass, HS, countour, last, 10);
+      
+      /*****On effectue une dilation sur l'image retournée par patchAll3 *******/
       Mat element = getStructuringElement(MORPH_ELLIPSE, Size(5,5), Point(0, 0) );
       dilate(last,last,element);
       if(!bench)
 		imshow("last",last);
+	  /**** On entoure les zones correspondant à la zone des poteaux trouvées *****/
       contourBlob(last,image);
       
       progress = (float)image_counter/(float)images.size();
