@@ -296,57 +296,11 @@ int getNextMatrix(Mat& M) {
 }
 
 /**
- * Description
- * @param src
-<<<<<<< HEAD
- * @param dst
- * @param min
- * @param max
- * */
-void thBetween(const Mat src, Mat& dst, int min, int max) {
-  src.copyTo(dst);
-  for(int i=0;i<src.rows;i++) {
-    for(int j=0;j<src.cols;j++) {
-      int pixel = (int) src.at<uchar>(i,j);
-      if( min <= pixel && max >= pixel) {
-        dst.at<uchar>(i,j) = 255;
-      } else {
-        dst.at<uchar>(i,j) = 0;
-      }
-    }
-  }
-}
-
-/**
- * Description
- * @param src1
- * @param src2
- * @param dst
- * 
- * */
-void thAnd(const Mat src1, const Mat src2, Mat &dst) {
-  src1.copyTo(dst);
-  for(int i=0;i<src1.rows;i++) {
-    for(int j=0;j<src1.cols;j++) {
-      int pixel1 = (int) src1.at<uchar>(i,j);
-      int pixel2 = (int) src2.at<uchar>(i,j);
-      if( pixel1 == 255 && pixel2 == 255) {
-        dst.at<uchar>(i,j) = 255;
-      } else {
-        dst.at<uchar>(i,j) = 0;
-      }
-    }
-  }
-}
-
-/**
  * Cette fonction va prendre une image binaire passé en paramètre  et va chercher les zones blanches qui correspondent à la base des
  * poteaux détectés. Elle va ensuite entourer ces zones avec des cercles rouges sur l'image d'origine
  * @param src Image binaire représantant les zones ou sont detectés le ou les poteaux des buts
  * @param originale Image originale ou seront dessiné les cercles
-=======
- * @param originale
->>>>>>> 500c37c9b1035667a236d7af15ee5138b3106baf
+
  * 
  * */
 void contourBlob(Mat src, Mat originale)
